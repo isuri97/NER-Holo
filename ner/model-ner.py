@@ -284,7 +284,7 @@ def camp_type_getter(hit):
     hit = hit.text
 
 
-df = pd.read_csv("../data/hgc_data.csv")
+df = pd.read_csv("data/hgc_data.csv")
 camps = df.SubcampMattingly.tolist()
 subcamps = df.Main.tolist()
 i = 0
