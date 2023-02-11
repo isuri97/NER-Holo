@@ -198,7 +198,7 @@ def subcamp_getter(hit):
 
 def date_open_getter(hit):
     hit = hit.text
-    df = pd.read_csv("../data/hgc_data.csv")
+    df = pd.read_csv("data/hgc_data.csv")
     dates = df.Date_Open.tolist()
     camps = df.SubcampMattingly.tolist()
     i = 0
@@ -239,7 +239,7 @@ def date_closed_getter(hit):
 
 def latlong_getter(hit):
     hit = hit.text
-    df = pd.read_csv("../data/hgc_data.csv")
+    df = pd.read_csv("data/hgc_data.csv")
     lats = df.LAT.tolist()
     longs = df.LONG.tolist()
     camps = df.SubcampMattingly.tolist()
@@ -261,7 +261,7 @@ def latlong_getter(hit):
 
 def hgc_id_getter(hit):
     hit = hit.text
-    df = pd.read_csv("../data/hgc_data.csv")
+    df = pd.read_csv("data/hgc_data.csv")
     ids = df.HGC_ID.tolist()
     camps = df.SubcampMattingly.tolist()
     i = 0
@@ -525,7 +525,7 @@ def regex_match(doc, pattern, label, filter=True,
 
 
 def ship_metadata_getter(ent):
-    df = pd.read_csv("../data/wwii-ships.csv")
+    df = pd.read_csv("data/wwii-ships.csv")
     if ent.label_ == "SHIP":
         ship_name = ent.text.replace("The", "").replace("the", "").strip()
         row = df.loc[df.name == ship_name]
@@ -539,7 +539,7 @@ def ship_metadata_getter(ent):
 
 
 # nlp = spacy.load("en_core_web_sm")
-df = pd.read_csv("../data/wwii-ships.csv")
+df = pd.read_csv("data/wwii-ships.csv")
 
 named_ships_pattern = f"(The|the) ({'|'.join(df.name.tolist())})"
 
@@ -555,7 +555,7 @@ def named_ships(doc):
 
 nlp.add_pipe("named_ships", before="ner")
 
-with open("../data/military_ranks.txt", "r") as f:
+with open("data/military_ranks.txt", "r") as f:
     ranks = f.read().splitlines()
 military_pattern = f"({'|'.join(ranks)})((?=\s[A-Z])(?:\s[A-Z][a-z\.]+)+)"
 @Language.component("find_military")
@@ -591,7 +591,7 @@ index=0
 
 import glob
 hits = []
-files = glob.glob("../data/new_ocr/*trs_en.txt")
+files = glob.glob("data/new_ocr/*trs_en.txt")
 
 for text_file in files:
         # Open the text file for reading
