@@ -449,50 +449,50 @@ def find_places(doc):
 
 nlp.add_pipe("find_places", before="ner")
 
-general_pattern = r"([A-Z]\w+) (River|Mountain|Mountains|Forest|Forests|Sea|Ocean)*"
-river_pattern = "(the|The) (Rhone|Volga|Danube|Ural|Dnieper|Don|Pechora|Kama|Oka|Belaya|Dniester|Rhine|Desna|Elbe|Donets|Vistula|Tagus|Daugava|Loire|Tisza|Ebro|Prut|Neman|Sava|Meuse|Kuban River|Douro|Mezen|Oder|Guadiana|Rhône|Kuma|Warta|Seine|Mureș|Northern Dvina|Vychegda|Drava|Po|Guadalquivir|Bolshoy Uzen|Siret|Maly Uzen|Terek|Olt|Vashka|Glomma|Garonne|Usa|Kemijoki|Great Morava|Moselle|Main 525|Torne|Dalälven|Inn|Maritsa|Marne|Neris|Júcar|Dordogne|Saône|Ume|Mur|Ångerman|Klarälven|Lule|Gauja|Weser|Kalix|Vindel River|Ljusnan|Indalsälven|Vltava|Ponoy|Ialomița|Onega|Somes|Struma|Adige|Skellefte|Tiber|Vah|Pite|Faxälven|Vardar|Shannon|Charente|Iskar|Tundzha|Ems|Tana|Scheldt|Timiș|Genil|Severn|Morava|Luga|Argeș|Ljungan|Minho|Venta|Thames|Drina|Jiu|Drin|Segura|Torne|Osam|Arda|Yantra|Kamchiya|Mesta)"
-
-
-@Language.component("find_geography")
-def find_geography(doc):
-    text = doc.text
-    river_ents = []
-    general_ents = []
-    original_ents = list(doc.ents)
-    for match in re.finditer(river_pattern, doc.text):
-        start, end = match.span()
-        span = doc.char_span(start, end)
-        if span is not None:
-            river_ents.append((span.start, span.end, span.text))
-    for match in re.finditer(general_pattern, doc.text):
-        start, end = match.span()
-        span = doc.char_span(start, end)
-        if span is not None:
-            general_ents.append((span.start, span.end, span.text))
-
-        #     all_ents = river_ents+general_ents
-    for ent in river_ents:
-        start, end, name = ent
-        per_ent = Span(doc, start, end, label="RIVER")
-        original_ents.append(per_ent)
-
-    for ent in general_ents:
-        start, end, name = ent
-        if "River" in name:
-            per_ent = Span(doc, start, end, label="RIVER")
-        elif "Mountain" in name:
-            per_ent = Span(doc, start, end, label="MOUNTAIN")
-        elif "Sea" in name:
-            per_ent = Span(doc, start, end, label="SEA-OCEAN")
-        elif "Forest" in name:
-            per_ent = Span(doc, start, end, label="FOREST")
-        original_ents.append(per_ent)
-    filtered = filter_spans(original_ents)
-    doc.ents = filtered
-    return (doc)
-
-
-nlp.add_pipe("find_geography", before="ner")
+# general_pattern = r"([A-Z]\w+) (River|Mountain|Mountains|Forest|Forests|Sea|Ocean)*"
+# river_pattern = "(the|The) (Rhone|Volga|Danube|Ural|Dnieper|Don|Pechora|Kama|Oka|Belaya|Dniester|Rhine|Desna|Elbe|Donets|Vistula|Tagus|Daugava|Loire|Tisza|Ebro|Prut|Neman|Sava|Meuse|Kuban River|Douro|Mezen|Oder|Guadiana|Rhône|Kuma|Warta|Seine|Mureș|Northern Dvina|Vychegda|Drava|Po|Guadalquivir|Bolshoy Uzen|Siret|Maly Uzen|Terek|Olt|Vashka|Glomma|Garonne|Usa|Kemijoki|Great Morava|Moselle|Main 525|Torne|Dalälven|Inn|Maritsa|Marne|Neris|Júcar|Dordogne|Saône|Ume|Mur|Ångerman|Klarälven|Lule|Gauja|Weser|Kalix|Vindel River|Ljusnan|Indalsälven|Vltava|Ponoy|Ialomița|Onega|Somes|Struma|Adige|Skellefte|Tiber|Vah|Pite|Faxälven|Vardar|Shannon|Charente|Iskar|Tundzha|Ems|Tana|Scheldt|Timiș|Genil|Severn|Morava|Luga|Argeș|Ljungan|Minho|Venta|Thames|Drina|Jiu|Drin|Segura|Torne|Osam|Arda|Yantra|Kamchiya|Mesta)"
+#
+#
+# @Language.component("find_geography")
+# def find_geography(doc):
+#     text = doc.text
+#     river_ents = []
+#     general_ents = []
+#     original_ents = list(doc.ents)
+#     for match in re.finditer(river_pattern, doc.text):
+#         start, end = match.span()
+#         span = doc.char_span(start, end)
+#         if span is not None:
+#             river_ents.append((span.start, span.end, span.text))
+#     for match in re.finditer(general_pattern, doc.text):
+#         start, end = match.span()
+#         span = doc.char_span(start, end)
+#         if span is not None:
+#             general_ents.append((span.start, span.end, span.text))
+#
+#         #     all_ents = river_ents+general_ents
+#     for ent in river_ents:
+#         start, end, name = ent
+#         per_ent = Span(doc, start, end, label="RIVER")
+#         original_ents.append(per_ent)
+#
+#     for ent in general_ents:
+#         start, end, name = ent
+#         if "River" in name:
+#             per_ent = Span(doc, start, end, label="RIVER")
+#         elif "Mountain" in name:
+#             per_ent = Span(doc, start, end, label="MOUNTAIN")
+#         elif "Sea" in name:
+#             per_ent = Span(doc, start, end, label="SEA-OCEAN")
+#         elif "Forest" in name:
+#             per_ent = Span(doc, start, end, label="FOREST")
+#         original_ents.append(per_ent)
+#     filtered = filter_spans(original_ents)
+#     doc.ents = filtered
+#     return (doc)
+#
+#
+# nlp.add_pipe("find_geography", before="ner")
 
 def regex_match(doc, pattern, label, filter=True,
                 context=False, context_list=[],
@@ -587,7 +587,7 @@ col0=[]
 col1=[]
 col2=[]
 l=0
-index=0
+index=495
 
 import glob
 hits = []
