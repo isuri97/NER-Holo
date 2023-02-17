@@ -7,9 +7,6 @@ from simpletransformers.ner import NERModel, NERArgs
 
 from contextlib import redirect_stdout
 
-from utils.label_converter import decode, encode
-
-from utils.print_information import print_information_multi_class, print_information
 
 parser = argparse.ArgumentParser(
     description='''evaluates multiple models  ''')
