@@ -2,3 +2,5 @@ simpletransformers
 pandas
 sklearn
 spacy
+sklearn_crfsuite
+keras
