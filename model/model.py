@@ -164,6 +164,7 @@ cuda_device = int(arguments.cuda_device)
 # MODEL_TYPE, MODEL_NAME,
 model = NERModel(
     MODEL_TYPE, MODEL_NAME,
+    cuda_device,
     args=model_args,
     labels=['O', 'B-DATE', 'B-PERSON', 'B-GPE', 'B-ORG', 'I-ORG', 'B-CARDINAL', 'B-LANGUAGE',
             'B-EVENT', 'I-DATE', 'B-NORP', 'B-TIME', 'I-TIME', 'I-GPE', 'B-ORDINAL', 'I-PERSON', 'B-MILITARY',
@@ -184,21 +185,24 @@ model = NERModel(
 
 predictions, outputs = model.predict(sentences)
 
-predictions = []
-with open('filex.txt', 'a') as f:
-    for h, id in zip(sentences, ids):
-        sentence_lst = []
-        sentence_lst.append(h)
-        preds, outputs = model.predict(sentence_lst)
-        predictions.append(preds)
-        # if len(df_test.groupby('sentence_id').get_group(id)) != len(predictions):
-        if len(h.split(' ')) != len(preds[0]):
-            f.write(h)
-            print(h)
-print(len(preds))
+# predictions = []
+# with open('filex.txt', 'a') as f:
+#     for h, id in zip(sentences, ids):
+#         sentence_lst = []
+#         sentence_lst.append(h)
+#         preds, outputs = model.predict(sentence_lst)
+#         predictions.append(preds)
+#         # if len(df_test.groupby('sentence_id').get_group(id)) != len(predictions):
+#         if len(h.split(' ')) != len(preds[0]):
+#             f.write(h)
+#             print(h)
+# print(len(preds))
+#
+# print(len(eval_df['labels']))
+# pred_list = []
 
-print(len(eval_df['labels']))
-pred_list = []
+
+
 # for pred in predictions:
 #     for tag in pred:
 #         pred_list.append(tag.values())
