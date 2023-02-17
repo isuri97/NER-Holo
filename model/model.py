@@ -134,7 +134,9 @@ eval_df = pd.DataFrame(df_test, columns=["sentence_id", "words", "labels"])
 model_args = {
     'train_batch_size': 32,
     'eval_batch_size': 8,
+    'overwrite_output_dir':True,
     'num_train_epochs': 1,
+
 }
 # model_args.labels_list = ['O', 'B-DATE', 'B-PERSON', 'B-GPE', 'B-ORG', 'I-ORG', 'B-CARDINAL', 'B-LANGUAGE',
 #                           'B-EVENT', 'I-DATE', 'B-NORP', 'B-TIME', 'I-TIME', 'I-GPE', 'B-ORDINAL', 'I-PERSON', 'B-MILITARY',
@@ -144,8 +146,6 @@ model_args = {
 #                           'B-PRODUCT', 'I-CAMP', 'I-LOC', 'I-PRODUCT', 'I-GHETTO', 'B-SPOUSAL', 'I-SPOUSAL', 'B-SHIP', 'I-SHIP',
 #                           'B-FOREST', 'I-FOREST', 'B-GROUP', 'I-GROUP', 'B-MOUNTAIN', 'I-MOUNTAIN']
 
-model_args.overwrite_output_dir = True
-model_args.reprocess_input_data = True
 
 # models = {'bert': 'bert-base-uncased', 'roberta': 'roberta-base', 'xlnet': 'xlnet-base-cased'}
 #
@@ -163,7 +163,7 @@ MODEL_TYPE = arguments.model_type
 cuda_device = int(arguments.cuda_device)
 # MODEL_TYPE, MODEL_NAME,
 model = NERModel(
-    MODEL_TYPE, MODEL_NAME,
+    MODEL_TYPE, 'outputs/',
     args=model_args,
     labels=['O', 'B-DATE', 'B-PERSON', 'B-GPE', 'B-ORG', 'I-ORG', 'B-CARDINAL', 'B-LANGUAGE',
             'B-EVENT', 'I-DATE', 'B-NORP', 'B-TIME', 'I-TIME', 'I-GPE', 'B-ORDINAL', 'I-PERSON', 'B-MILITARY',
