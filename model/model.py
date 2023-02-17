@@ -88,8 +88,8 @@ df1.to_csv('testing.csv')
 
 df_train= df1
 df_test = df1
-# df_test = df_test.loc[(df_test['sentence_id'] >= 187) & (df_test['sentence_id'] < 188)]
-# print(len(df_test))
+df_test = df_test.loc[(df_test['sentence_id'] >= 1) & (df_test['sentence_id'] < 2)]
+print(len(df_test))
 # df_test = pd.read_csv('data/373.txt')
 # df_test = df_test[~df_test['words'].str.contains('\'')]
 # df_test=df_test[~df_test['words'].str.contains('\[')]
@@ -176,7 +176,7 @@ model = NERModel(
 )
 # Train the model
 # model.train_model(train_df)
-# model.save_model(output_dir='outputs/saved_model/')
+model.save_model(output_dir='outputs/saved_model/')
 
 # Evaluate the model
 # result, model_outputs, predictions = model.eval_model(eval_df)
@@ -216,25 +216,28 @@ predictions, outputs = model.predict(sentences)
 
 ll = []
 key_list = []
+# for i in predictions:
+#     for lst in i[0]:
+#         # for (k,v) in lst:
+#         ll.append(lst.values())
+#         # ll += list(lst.values())
+#         # key_list += list(lst.keys())
+#         key_list.append(lst.keys())
+
 for i in predictions:
-    for lst in i[0]:
-        # for (k,v) in lst:
-        ll += list(lst.values())
-        key_list += list(lst.keys())
-        # key_list.append(lst.keys())
+    for h in i:
+        for v in h.values():
+            ll.append(v)
+for i in predictions:
+    for h in i:
+        for v in h.keys():
+            key_list.append(v)
 
 new1 = pd.DataFrame()
 new1['w'] = key_list
 new1['w'].to_csv('pred_key-list.csv')
 
-# for i in predictions:
-#     for h in i:
-#         for v in h.keys():
-#             key_list.append(v)
 
-# for i in range(0,len(key_list)):
-#     if key_list[i]!= words[i]:
-#         print(f'not matched index {i}, preadval = {key_list[i]}, gold val = {words[i]}')
 
 
 print('------')
@@ -246,7 +249,7 @@ w_list = words.to_list()
 new2 = pd.DataFrame()
 new2['w'] = w_list
 new2['w'].to_csv('word-list.csv')
-w_list.to_csv('word-list.csv')
+# new2['w'].to_csv('word-list.csv')
 
 
 # for word in words:
