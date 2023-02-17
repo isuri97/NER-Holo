@@ -88,8 +88,8 @@ df1.to_csv('testing.csv')
 
 df_train= df1
 df_test = df1
-df_test = df_test.loc[(df_test['sentence_id'] >= 1) & (df_test['sentence_id'] < 2)]
-print(len(df_test))
+# df_test = df_test.loc[(df_test['sentence_id'] >= 1) & (df_test['sentence_id'] < 2)]
+# print(len(df_test))
 # df_test = pd.read_csv('data/373.txt')
 # df_test = df_test[~df_test['words'].str.contains('\'')]
 # df_test=df_test[~df_test['words'].str.contains('\[')]
