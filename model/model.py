@@ -108,7 +108,7 @@ model = NERModel(
             'B-FOREST', 'I-FOREST', 'B-GROUP', 'I-GROUP', 'B-MOUNTAIN', 'I-MOUNTAIN']
 )
 # Train the model
-# model.train_model(train_df)
+model.train_model(train_df)
 # model.save_model(output_dir='outputs/saved_model/')
 
 # Evaluate the model
