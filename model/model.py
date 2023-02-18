@@ -1,4 +1,5 @@
 import pandas as pd
+import torch.cuda
 from sklearn import metrics
 from sklearn.model_selection import train_test_split
 import argparse
@@ -15,30 +16,24 @@ parser.add_argument('--model_name', required=False, help='model name', default="
 parser.add_argument('--model_type', required=False, help='model type', default="bert-base-cased")
 parser.add_argument('--cuda_device', required=False, help='cuda device', default=0)
 parser.add_argument('--train', required=False, help='train file', default='data/sample.txt')
-# parser.add_argument('--test', required=False, help='test file', default='data/SOLD_test.tsv')
-# parser.add_argument('--lang', required=False, help='language', default="sin")
 
 arguments = parser.parse_args()
 
-df1 = pd.read_csv('data/testing.csv')
+df1 = pd.read_csv('data/new/testing.csv')
 
 df_train, df_test = [x for _, x in df1.groupby(df1['sentence_id'] >= 400)]
-print(len(df_train))
 
 # df_train = df1
 # df_test = df1
 
-print(len(df_train))
-print(len(df_test))
+print(f'training set size {len(df_train)}')
+print(f'test set size {len(df_test)}')
 
 # concatenate words till . and add comma
 words = df_test['words']
 sentence_ids = df_test['sentence_id']
 
-df_test
-
 df_test = df_test.astype({'labels': 'string'})
-print(df_test.dtypes)
 
 sentences = []
 ids = []
@@ -54,7 +49,15 @@ for word, s_id in zip(words.to_list(), sentence_ids.to_list()):
 # sentences = [sentence.strip() + "." for sentence in sentences if sentence.strip()]
 
 # sentences=sentences[0:5]sentence
-sentences
+
+# parity check
+total_count = 0
+for sentence in sentences:
+    total_count+= len(sentence.split(' '))
+
+print(f'parity number is {total_count} and actual number is {len(words)}' )
+
+
 
 # using the train test split function
 # X_train, y_train,= train_test_split(df1,test_size=0.1)
@@ -65,31 +68,12 @@ train_df = pd.DataFrame(df_train, columns=["sentence_id", "words", "labels"])
 eval_df = pd.DataFrame(df_test, columns=["sentence_id", "words", "labels"])
 
 model_args = {
-    'train_batch_size': 32,
-    'eval_batch_size': 8,
+    'train_batch_size': 64,
+    'eval_batch_size': 32,
     'overwrite_output_dir':True,
     'num_train_epochs': 1,
 
 }
-# model_args.labels_list = ['O', 'B-DATE', 'B-PERSON', 'B-GPE', 'B-ORG', 'I-ORG', 'B-CARDINAL', 'B-LANGUAGE',
-#                           'B-EVENT', 'I-DATE', 'B-NORP', 'B-TIME', 'I-TIME', 'I-GPE', 'B-ORDINAL', 'I-PERSON', 'B-MILITARY',
-#                           'I-MILITARY', 'I-NORP', 'B-CAMP', 'I-EVENT', 'I-CARDINAL', 'B-LAW', 'I-LAW', 'B-QUANTITY', 'B-RIVER',
-#                           'I-RIVER', 'B-PERCENT', 'I-PERCENT', 'B-WORK_OF_ART', 'I-QUANTITY', 'B-FAC', 'I-FAC', 'I-WORK_OF_ART',
-#                           'B-MONEY', 'I-MONEY', 'B-STREET', 'I-STREET', 'B-LOC', 'B-GHETTO', 'B-SEA-OCEAN', 'I-SEA-OCEAN',
-#                           'B-PRODUCT', 'I-CAMP', 'I-LOC', 'I-PRODUCT', 'I-GHETTO', 'B-SPOUSAL', 'I-SPOUSAL', 'B-SHIP', 'I-SHIP',
-#                           'B-FOREST', 'I-FOREST', 'B-GROUP', 'I-GROUP', 'B-MOUNTAIN', 'I-MOUNTAIN']
-
-
-# models = {'bert': 'bert-base-uncased', 'roberta': 'roberta-base', 'xlnet': 'xlnet-base-cased'}
-#
-# # Create a NERModel
-# for model_type, model_name in models.items():
-#     model = NERModel(model_type, model_name,  args=model_args)
-#     model.train_model(train_df)
-#     # Evaluate the model
-#     result, model_outputs, predictions = model.eval_model(eval_df)
-#     print('#####')
-#     print(result)
 
 MODEL_NAME = arguments.model_name
 MODEL_TYPE = arguments.model_type
@@ -97,7 +81,8 @@ cuda_device = int(arguments.cuda_device)
 # MODEL_TYPE, MODEL_NAME,
 model = NERModel(
     MODEL_TYPE, MODEL_NAME ,
-    use_cuda=cuda_device,
+    use_cuda=torch.cuda.is_available(),
+    cuda_device=cuda_device,
     args=model_args,
     labels=['O', 'B-DATE', 'B-PERSON', 'B-GPE', 'B-ORG', 'I-ORG', 'B-CARDINAL', 'B-LANGUAGE',
             'B-EVENT', 'I-DATE', 'B-NORP', 'B-TIME', 'I-TIME', 'I-GPE', 'B-ORDINAL', 'I-PERSON', 'B-MILITARY',
@@ -109,12 +94,6 @@ model = NERModel(
 )
 # Train the model
 model.train_model(train_df)
-# model.save_model(output_dir='outputs/saved_model/')
-
-# Evaluate the model
-# result, model_outputs, predictions = model.eval_model(eval_df)
-# print('#####')
-# print(result)
 
 predictions, outputs = model.predict(sentences)
 
@@ -170,9 +149,6 @@ new1 = pd.DataFrame()
 new1['w'] = sentences
 new1['w'].to_csv('pred_sent-list.csv')
 
-
-
-
 print('------')
 print(len(ll))
 print('======')
@@ -182,34 +158,7 @@ w_list = words.to_list()
 new2 = pd.DataFrame()
 new2['w'] = sentences
 new2['w'].to_csv('word-sent.csv')
-# new2['w'].to_csv('word-list.csv')
 
-
-# for word in words:
-#     w_list.append(word)
-
-
-missing_words = set(w_list) - set(key_list)
-print(missing_words)
-
-result = list((Counter(w_list) - Counter(key_list)).elements())
-print(result)
-#
-# missing_indexes_and_words = []
-# for i, word in enumerate(words):
-#     if word not in key_list:
-#         missing_indexes_and_words.append((i, word))
-#
-# print(len(missing_indexes_and_words))
-# new = pd.DataFrame()
-# new['sub'] = missing_indexes_and_words
-#
-# new['sub'].to_csv('te.csv')
-#
-# eval_df['labels'] = decode(eval_df['labels'])
-# eval_df['predictions'] = decode(eval_df['predictions'])
-
-# print_information(eval_df,'predictions','labels')
 
 eval_df['predictions'] = ll
 
