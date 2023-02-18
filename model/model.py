@@ -21,10 +21,10 @@ arguments = parser.parse_args()
 
 df1 = pd.read_csv('data/new/testing.csv')
 
-df_train, df_test = [x for _, x in df1.groupby(df1['sentence_id'] >= 400)]
+# df_train, df_test = [x for _, x in df1.groupby(df1['sentence_id'] >= 400)]
 
-# df_train = df1
-# df_test = df1
+df_train = df1
+df_test = df1
 
 print(f'training set size {len(df_train)}')
 print(f'test set size {len(df_test)}')
@@ -72,7 +72,6 @@ model_args = {
     'eval_batch_size': 32,
     'overwrite_output_dir':True,
     'num_train_epochs': 1,
-
 }
 
 MODEL_NAME = arguments.model_name
@@ -166,4 +165,5 @@ y_true = eval_df['labels']
 y_pred = eval_df['predictions']
 
 # print(metrics.confusion_matrix(y_true, y_pred))
-print(metrics.classification_report(y_true, y_pred, digits=7))
+with open('metrics.txt','w') as f:
+    f.write(metrics.classification_report(y_true, y_pred, digits=7))
