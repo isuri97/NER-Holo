@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn import metrics
 from sklearn.model_selection import train_test_split
 import argparse
+from collections import Counter
 
 from simpletransformers.ner import NERModel, NERArgs
 
@@ -19,81 +20,13 @@ parser.add_argument('--train', required=False, help='train file', default='data/
 
 arguments = parser.parse_args()
 
-# # Creating train_df  and eval_df for demonstration
-# train_data = [
-#     [0, "Simple", "B-MISC"],
-#     [0, "Transformers", "I-MISC"],
-#     [0, "started", "O"],
-#     [0, "with", "O"],
-#     [0, "text", "O"],
-#     [0, "classification", "B-MISC"],
-#     [1, "Simple", "B-MISC"],
-#     [1, "Transformers", "I-MISC"],
-#     [1, "can", "O"],
-#     [1, "now", "O"],
-#     [1, "perform", "O"],
-#     [1, "NER", "B-MISC"],
-# ]
-# train_df = pd.DataFrame(train_data, columns=["sentence_id", "words", "labels"])
-#
-# eval_data = [
-#     [0, "Simple", "B-MISC"],
-#     [0, "Transformers", "I-MISC"],
-#     [0, "was", "O"],
-#     [0, "built", "O"],
-#     [0, "for", "O"],
-#     [0, "text", "O"],
-#     [0, "classification", "B-MISC"],
-#     [1, "Simple", "B-MISC"],
-#     [1, "Transformers", "I-MISC"],
-#     [1, "then", "O"],
-#     [1, "expanded", "O"],
-#     [1, "to", "O"],
-#     [1, "perform", "O"],
-#     [1, "NER", "B-MISC"],
-# ]
-# eval_df = pd.DataFrame(eval_data, columns=["sentence_id", "words", "labels"])
+df1 = pd.read_csv('data/testing.csv')
 
-df1 = pd.read_csv('data/sample.txt')
-unique_values_list = df1['labels'].unique().tolist()
-print(unique_values_list)
-print(df1.shape)
-print(df1.dtypes)
-print(df1.isnull().values.any())
-
-df1 = df1.dropna()
-print(df1.isnull().values.any())
-
-print(len(df1))
-print('---')
-
-df1 = df1[~df1['words'].str.contains('\[')]
-df1 = df1[~df1['words'].str.contains('\]')]
-df1 = df1[~df1['words'].str.contains('\'')]
-df1 = df1[~df1['words'].str.contains('\(')]
-df1 = df1[~df1['words'].str.contains('\)')]
-df1 = df1[~df1['words'].str.contains('-')]
-df1 = df1[~df1['words'].str.contains(';')]
-df1 = df1[~df1['words'].str.contains(' ')]
-df1 = df1[~df1['words'].str.contains('“')]
-df1 = df1[~df1['words'].str.contains('”')]
-df1 = df1[~df1['words'].str.contains(',')]
-df1 = df1[~df1['words'].str.contains('’')]
-df1 = df1[~df1['words'].str.contains(':')]
-df1 = df1[~df1['words'].str.contains(' ')]
-
-df1.to_csv('testing.csv')
-# df_train, df_test = [x for _, x in df1.groupby(df1['sentence_id'] <= 190)]
+# df_train, df_test = [x for _, x in df1.groupby(df1['sentence_id'] >= 480)]
 # print(len(df_train))
 
-df_train= df1
+df_train = df1
 df_test = df1
-# df_test = df_test.loc[(df_test['sentence_id'] >= 1) & (df_test['sentence_id'] < 2)]
-# print(len(df_test))
-# df_test = pd.read_csv('data/373.txt')
-# df_test = df_test[~df_test['words'].str.contains('\'')]
-# df_test=df_test[~df_test['words'].str.contains('\[')]
-# df_test=df_test[~df_test['words'].str.contains('\]')]
 
 print(len(df_train))
 print(len(df_test))
@@ -163,7 +96,7 @@ MODEL_TYPE = arguments.model_type
 cuda_device = int(arguments.cuda_device)
 # MODEL_TYPE, MODEL_NAME,
 model = NERModel(
-    MODEL_TYPE, MODEL_NAME ,
+    MODEL_TYPE, 'outputs/' ,
     use_cuda=cuda_device,
     args=model_args,
     labels=['O', 'B-DATE', 'B-PERSON', 'B-GPE', 'B-ORG', 'I-ORG', 'B-CARDINAL', 'B-LANGUAGE',
@@ -176,7 +109,7 @@ model = NERModel(
 )
 # Train the model
 # model.train_model(train_df)
-model.save_model(output_dir='outputs/saved_model/')
+# model.save_model(output_dir='outputs/saved_model/')
 
 # Evaluate the model
 # result, model_outputs, predictions = model.eval_model(eval_df)
@@ -234,8 +167,8 @@ for i in predictions:
             key_list.append(v)
 
 new1 = pd.DataFrame()
-new1['w'] = key_list
-new1['w'].to_csv('pred_key-list.csv')
+new1['w'] = sentences
+new1['w'].to_csv('pred_sent-list.csv')
 
 
 
@@ -247,8 +180,8 @@ print('======')
 
 w_list = words.to_list()
 new2 = pd.DataFrame()
-new2['w'] = w_list
-new2['w'].to_csv('word-list.csv')
+new2['w'] = sentences
+new2['w'].to_csv('word-sent.csv')
 # new2['w'].to_csv('word-list.csv')
 
 
@@ -256,9 +189,12 @@ new2['w'].to_csv('word-list.csv')
 #     w_list.append(word)
 
 
-# missing_words = set(w_list) - set(key_list)
-# print(missing_words)
-# #
+missing_words = set(w_list) - set(key_list)
+print(missing_words)
+
+result = list((Counter(w_list) - Counter(key_list)).elements())
+print(result)
+#
 # missing_indexes_and_words = []
 # for i, word in enumerate(words):
 #     if word not in key_list:
