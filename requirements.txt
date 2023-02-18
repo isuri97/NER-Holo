@@ -1,4 +1,4 @@
-simpletransformers
+simpletransformers==0.63.7
 pandas
 sklearn
 spacy
