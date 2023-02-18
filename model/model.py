@@ -96,7 +96,7 @@ MODEL_TYPE = arguments.model_type
 cuda_device = int(arguments.cuda_device)
 # MODEL_TYPE, MODEL_NAME,
 model = NERModel(
-    MODEL_TYPE, 'outputs/' ,
+    MODEL_TYPE, MODEL_NAME ,
     use_cuda=cuda_device,
     args=model_args,
     labels=['O', 'B-DATE', 'B-PERSON', 'B-GPE', 'B-ORG', 'I-ORG', 'B-CARDINAL', 'B-LANGUAGE',
