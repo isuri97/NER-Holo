@@ -4,7 +4,8 @@ from spacy.tokens import Span
 from spacy.language import Language
 import re
 import pandas as pd
-import spacy_transformers
+import glob
+# pip3 install spacy-transformers
 
 nlp = spacy.load("en_core_web_trf")
 
@@ -589,7 +590,7 @@ col2=[]
 l=0
 index=495
 
-import glob
+
 hits = []
 files = glob.glob("data/new_ocr/*trs_en.txt")
 
