@@ -22,11 +22,11 @@ arguments = parser.parse_args()
 
 df1 = pd.read_csv('data/testing.csv')
 
-# df_train, df_test = [x for _, x in df1.groupby(df1['sentence_id'] >= 480)]
-# print(len(df_train))
+df_train, df_test = [x for _, x in df1.groupby(df1['sentence_id'] >= 400)]
+print(len(df_train))
 
-df_train = df1
-df_test = df1
+# df_train = df1
+# df_test = df1
 
 print(len(df_train))
 print(len(df_test))
@@ -218,23 +218,3 @@ y_pred = eval_df['predictions']
 
 # print(metrics.confusion_matrix(y_true, y_pred))
 print(metrics.classification_report(y_true, y_pred, digits=7))
-
-# print_information_multi_class(eval_df,'predictions','labels')
-# sentences = ["Some arbitary sentence", "Simple Transformers sentence"]
-# predictions, raw_outputs = model.predict(sentences)
-# #
-# # Predictions on arbitary text strings
-# sentences = ["Some arbitary sentence", "Simple Transformers sentence"]
-# predictions, raw_outputs = model.predict(sentences)
-#
-# print(predictions)
-#
-# # More detailed preditctions
-# for n, (preds, outs) in enumerate(zip(predictions, raw_outputs)):
-#     print("\n___________________________")
-#     print("Sentence: ", sentences[n])
-#     for pred, out in zip(preds, outs):
-#         key = list(pred.keys())[0]
-#         new_out = out[key]
-#         preds = list(softmax(np.mean(new_out, axis=0)))
-#         print(key, pred[key], preds[np.argmax(preds)], preds)
