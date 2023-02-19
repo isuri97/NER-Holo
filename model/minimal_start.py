@@ -65,3 +65,6 @@ result, model_outputs, preds_list = model.eval_model(eval_data)
 
 # Make predictions with the model
 predictions, raw_outputs = model.predict(["Hermione was the best in her class"])
+
+
+print(predictions)
