@@ -18,20 +18,32 @@ parser.add_argument('--train', required=False, help='train file', default='data/
 
 arguments = parser.parse_args()
 
-df1 = pd.read_csv('data/new/testing.csv')
+df1 = pd.read_csv('data/new/cleaned/dataset.csv')
 df1 = pd.DataFrame({'document_id': df1['sentence_id'], 'words': df1['words'], 'labels': df1['labels']})
 
 sentence_id_list = []
 
 sentence_id_seq = 0
+word_count = 0
+
+dropping_sentences = []
+
 for word in df1['words'].tolist():
+    word_count += 1
     if word == "." or word == "?" or word == "!":
         sentence_id_list.append(sentence_id_seq)
+        if word_count > 510:
+            dropping_sentences.append(sentence_id_seq)
         sentence_id_seq += 1
+        word_count = 0
     else:
+        if word_count > 510:
+            dropping_sentences.append(sentence_id_seq)
         sentence_id_list.append(sentence_id_seq)
 
 df1['sentence_id'] = sentence_id_list
+
+# df2 = df1[df1['sentence_id'] not in dropping_sentences]
 
 # df_train, df_test = [x for _, x in df1.groupby(df1['sentence_id'] >= 400)]
 
@@ -50,11 +62,14 @@ df_test = df_test.astype({'labels': 'string'})
 sentences = []
 ids = []
 sentence = ""
+word_count=0
 for word, s_id in zip(words.to_list(), sentence_ids.to_list()):
+    word_count+=1
     sentence += word + " "
     if word == "." or word == "?" or word == "!":
         sentences.append(sentence.strip())
         ids.append(s_id)
+        word_count=0
         sentence = ""
 
 # parity check
@@ -91,12 +106,15 @@ model = NERModel(
             'B-FOREST', 'I-FOREST', 'B-GROUP', 'I-GROUP', 'B-MOUNTAIN', 'I-MOUNTAIN']
 )
 
-df_train, df_eval = train_test_split(df_train, test_size=0.2, random_state=777)
+# df_train, df_eval = train_test_split(df_train, test_size=0.2, random_state=777)
 # Train the model
-model.train_model(df_train, eval_df=df_eval)
+
+training_df = pd.DataFrame({'sentence_id': df1['sentence_id'], 'words': df1['words'], 'labels': df1['labels']})
+testing_df = pd.DataFrame({'sentence_id': df1['sentence_id'], 'words': df1['words'], 'labels': df1['labels']})
+
+model.train_model(training_df)
 
 predictions, outputs = model.predict(sentences)
-
 
 ll = []
 key_list = []
@@ -111,14 +129,13 @@ for i in predictions:
             key_list.append(v)
 
 pred_stats = pd.DataFrame()
-pred_stats['words']= key_list
-pred_stats['tags']= ll
+pred_stats['words'] = key_list
+pred_stats['tags'] = ll
 
-df1.to_csv('dataset.csv',index=False)
-pred_stats.to_csv('prediction_stats.csv',index=False)
+df1.to_csv('dataset.csv', index=False)
+pred_stats.to_csv('prediction_stats.csv', index=False)
 
-
-df_test['predictions'] = ll
+testing_df['predictions'] = ll
 
 y_true = df_test['labels']
 y_pred = df_test['predictions']
