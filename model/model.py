@@ -59,18 +59,9 @@ for sentence in sentences:
 print(f'parity number is {total_count} and actual number is {len(words)}' )
 
 
-
-# using the train test split function
-# X_train, y_train,= train_test_split(df1,test_size=0.1)
-# df_train['labels'] = encode(df_train["labels"])
-# df_test['labels'] = encode(df_test["labels"])
-
-train_df = pd.DataFrame(df_train, columns=["sentence_id", "words", "labels"])
-eval_df = pd.DataFrame(df_test, columns=["sentence_id", "words", "labels"])
-
 model_args = {
-    'train_batch_size': 8,
-    'eval_batch_size': 4,
+    'train_batch_size': 64,
+    'eval_batch_size': 8,
     'overwrite_output_dir':True,
     'num_train_epochs': 1,
     'use_multiprocessing': False,
@@ -95,7 +86,7 @@ model = NERModel(
             'B-FOREST', 'I-FOREST', 'B-GROUP', 'I-GROUP', 'B-MOUNTAIN', 'I-MOUNTAIN']
 )
 # Train the model
-model.train_model(train_df)
+model.train_model(df_train)
 
 predictions, outputs = model.predict(sentences)
 
@@ -162,10 +153,10 @@ new2['w'] = sentences
 new2['w'].to_csv('word-sent.csv')
 
 
-eval_df['predictions'] = ll
+df_test['predictions'] = ll
 
-y_true = eval_df['labels']
-y_pred = eval_df['predictions']
+y_true = df_test['labels']
+y_pred = df_test['predictions']
 
 # print(metrics.confusion_matrix(y_true, y_pred))
 with open('metrics.txt','w') as f:
