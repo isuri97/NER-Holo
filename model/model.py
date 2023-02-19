@@ -9,7 +9,6 @@ from simpletransformers.ner import NERModel, NERArgs
 
 from contextlib import redirect_stdout
 
-
 parser = argparse.ArgumentParser(
     description='''evaluates multiple models  ''')
 parser.add_argument('--model_name', required=False, help='model name', default="bert")
@@ -20,7 +19,7 @@ parser.add_argument('--train', required=False, help='train file', default='data/
 arguments = parser.parse_args()
 
 df1 = pd.read_csv('data/new/testing.csv')
-df1 = pd.DataFrame({'sentence_id': df1['sentence_id'],'words':df1['words'],'labels':df1['labels']})
+df1 = pd.DataFrame({'sentence_id': df1['sentence_id'], 'words': df1['words'], 'labels': df1['labels']})
 
 # df_train, df_test = [x for _, x in df1.groupby(df1['sentence_id'] >= 400)]
 
@@ -46,23 +45,17 @@ for word, s_id in zip(words.to_list(), sentence_ids.to_list()):
         ids.append(s_id)
         sentence = ""
 
-# sentences = " ".join(words).split(".")
-# sentences = [sentence.strip() + "." for sentence in sentences if sentence.strip()]
-
-# sentences=sentences[0:5]sentence
-
 # parity check
 total_count = 0
 for sentence in sentences:
-    total_count+= len(sentence.split(' '))
+    total_count += len(sentence.split(' '))
 
-print(f'parity number is {total_count} and actual number is {len(words)}' )
-
+print(f'parity number is {total_count} and actual number is {len(words)}')
 
 model_args = {
     'train_batch_size': 64,
     'eval_batch_size': 8,
-    'overwrite_output_dir':True,
+    'overwrite_output_dir': True,
     'num_train_epochs': 1,
     'use_multiprocessing': False,
     'use_multiprocessing_for_evaluation': False,
@@ -73,7 +66,7 @@ MODEL_TYPE = arguments.model_type
 cuda_device = int(arguments.cuda_device)
 # MODEL_TYPE, MODEL_NAME,
 model = NERModel(
-    MODEL_TYPE, MODEL_NAME ,
+    MODEL_TYPE, MODEL_NAME,
     use_cuda=torch.cuda.is_available(),
     cuda_device=cuda_device,
     args=model_args,
@@ -85,49 +78,16 @@ model = NERModel(
             'B-PRODUCT', 'I-CAMP', 'I-LOC', 'I-PRODUCT', 'I-GHETTO', 'B-SPOUSAL', 'I-SPOUSAL', 'B-SHIP', 'I-SHIP',
             'B-FOREST', 'I-FOREST', 'B-GROUP', 'I-GROUP', 'B-MOUNTAIN', 'I-MOUNTAIN']
 )
+
+df_train, df_eval = train_test_split(df_train, test_size=0.2, random_state=777)
 # Train the model
-model.train_model(df_train)
+model.train_model(df_train, eval_df=df_eval)
 
 predictions, outputs = model.predict(sentences)
-
-# predictions = []
-# with open('filex.txt', 'a') as f:
-#     for h, id in zip(sentences, ids):
-#         sentence_lst = []
-#         sentence_lst.append(h)
-#         preds, outputs = model.predict(sentence_lst)
-#         predictions.append(preds)
-#         # if len(df_test.groupby('sentence_id').get_group(id)) != len(predictions):
-#         if len(h.split(' ')) != len(preds[0]):
-#             f.write(h)
-#             print(h)
-# print(len(preds))
-#
-# print(len(eval_df['labels']))
-# pred_list = []
-
-
-
-# for pred in predictions:
-#     for tag in pred:
-#         pred_list.append(tag.values())
-#
-#
-# lab=eval_df['labels'].tolist()
-# for i in range(0,len(pred_list)):
-#     if pred_list[i]!=lab[i]:
-#         print(f'not matched index {i}, preadval = {predictions[i]}, gold val = {lab[i]}')
 
 
 ll = []
 key_list = []
-# for i in predictions:
-#     for lst in i[0]:
-#         # for (k,v) in lst:
-#         ll.append(lst.values())
-#         # ll += list(lst.values())
-#         # key_list += list(lst.keys())
-#         key_list.append(lst.keys())
 
 for i in predictions:
     for h in i:
@@ -152,12 +112,11 @@ new2 = pd.DataFrame()
 new2['w'] = sentences
 new2['w'].to_csv('word-sent.csv')
 
-
 df_test['predictions'] = ll
 
 y_true = df_test['labels']
 y_pred = df_test['predictions']
 
 # print(metrics.confusion_matrix(y_true, y_pred))
-with open('metrics.txt','w') as f:
+with open('metrics.txt', 'w') as f:
     f.write(metrics.classification_report(y_true, y_pred, digits=7))
