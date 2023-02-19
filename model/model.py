@@ -112,6 +112,9 @@ new2 = pd.DataFrame()
 new2['w'] = sentences
 new2['w'].to_csv('word-sent.csv')
 
+with open('predicted_tokens.txt','w') as f:
+    f.writelines(ll)
+
 df_test['predictions'] = ll
 
 y_true = df_test['labels']
