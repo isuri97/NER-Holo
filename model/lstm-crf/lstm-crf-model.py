@@ -9,10 +9,11 @@ import keras.backend as k
 import numpy as np
 # import matplotlib.pyplot as plt
 #
-# from plot_keras_history import plot_history
+from plot_keras_history import plot_history
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import multilabel_confusion_matrix
 from keras_contrib.utils import save_load_utils
+
 
 from keras import layers
 from keras import optimizers
@@ -155,45 +156,42 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_
 print("Number of sentences in the training dataset: {}".format(len(X_train)))
 print("Number of sentences in the test dataset : {}".format(len(X_test)))
 #
-# X_train = np.array(X_train)
-# X_test = np.array(X_test)
-# y_train = np.array(y_train)
-# y_test = np.array(y_test)
+X_train = np.array(X_train)
+X_test = np.array(X_test)
+y_train = np.array(y_train)
+y_test = np.array(y_test)
+
+WORD_COUNT = len(index2word)
+DENSE_EMBEDDING = 50
+LSTM_UNITS = 50
+LSTM_DROPOUT = 0.1
+DENSE_UNITS = 100
+BATCH_SIZE = 256
+MAX_EPOCHS = 5
 #
-# WORD_COUNT = len(index2word)
-# DENSE_EMBEDDING = 50
-# LSTM_UNITS = 50
-# LSTM_DROPOUT = 0.1
-# DENSE_UNITS = 100
-# BATCH_SIZE = 256
-# MAX_EPOCHS = 5
-#
-# input_layer = layers.Input(shape=(MAX_SENTENCE,))
-#
-# model = layers.Embedding(WORD_COUNT, DENSE_EMBEDDING, embeddings_initializer="uniform", input_length=MAX_SENTENCE)(input_layer)
-#
-# model = layers.Bidirectional(layers.LSTM(LSTM_UNITS, recurrent_dropout=LSTM_DROPOUT, return_sequences=True))(model)
-#
-# model = layers.TimeDistributed(layers.Dense(DENSE_UNITS, activation="relu"))(model)
-#
-# crf_layer = CRF(units=TAG_COUNT)
-# output_layer = crf_layer(model)
-#
-# ner_model = Model(input_layer, output_layer)
-#
-# loss = losses.crf_loss
-# acc_metric = metrics.crf_accuracy
-# opt = optimizers.Adam(lr=0.001)
-#
-# ner_model.compile(optimizer=opt, loss=loss, metrics=[acc_metric])
-#
-# ner_model.summary()
-#
-# history = ner_model.fit(X_train, y_train, batch_size=BATCH_SIZE, epochs=MAX_EPOCHS, validation_split=0.1, verbose=2)
-#
-# y_pred = ner_model.predict(X_test)
-#
-# y_pred = np.argmax(y_pred, axis=2)
-#
-# y_test = np.argmax(y_test, axis=2)
+input_layer = layers.Input(shape=(MAX_SENTENCE,))
+model = layers.Embedding(WORD_COUNT, DENSE_EMBEDDING, embeddings_initializer="uniform", input_length=MAX_SENTENCE)(input_layer)
+model = layers.Bidirectional(layers.LSTM(LSTM_UNITS, recurrent_dropout=LSTM_DROPOUT, return_sequences=True))(model)
+model = layers.TimeDistributed(layers.Dense(DENSE_UNITS, activation="relu"))(model)
+crf_layer = CRF(units=TAG_COUNT)
+output_layer = crf_layer(model)
+ner_model = Model(input_layer, output_layer)
+loss = losses.crf_loss
+acc_metric = metrics.crf_accuracy
+opt = optimizers.Adam(lr=0.001)
+ner_model.compile(optimizer=opt, loss=loss, metrics=[acc_metric])
+ner_model.summary()
+
+history = ner_model.fit(X_train, y_train, batch_size=BATCH_SIZE, epochs=MAX_EPOCHS, validation_split=0.1, verbose=2)
+
+plot_history(history.history)
+
+y_pred = ner_model.predict(X_test)
+
+y_pred = np.argmax(y_pred, axis=2)
+
+y_test = np.argmax(y_test, axis=2)
+accuracy = (y_pred == y_test).mean()
+
+print("Accuracy: {:.4f}/".format(accuracy))
 #
