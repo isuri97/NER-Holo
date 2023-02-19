@@ -9,16 +9,16 @@ import keras.backend as k
 import numpy as np
 # import matplotlib.pyplot as plt
 #
-from plot_keras_history import plot_history
+# from plot_keras_history import plot_history
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import multilabel_confusion_matrix
 from keras_contrib.utils import save_load_utils
 
 
-from keras import layers
-from keras import optimizers
+from tensorflow.keras import layers
+from tensorflow.keras import optimizers
 
-from keras.models import Model
+from tensorflow.keras.models import Model
 
 from keras_contrib.layers import CRF
 from keras_contrib import losses
@@ -184,7 +184,7 @@ ner_model.summary()
 
 history = ner_model.fit(X_train, y_train, batch_size=BATCH_SIZE, epochs=MAX_EPOCHS, validation_split=0.1, verbose=2)
 
-plot_history(history.history)
+# plot_history(history.history)
 
 y_pred = ner_model.predict(X_test)
 
