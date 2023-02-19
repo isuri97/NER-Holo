@@ -19,7 +19,19 @@ parser.add_argument('--train', required=False, help='train file', default='data/
 arguments = parser.parse_args()
 
 df1 = pd.read_csv('data/new/testing.csv')
-df1 = pd.DataFrame({'sentence_id': df1['sentence_id'], 'words': df1['words'], 'labels': df1['labels']})
+df1 = pd.DataFrame({'document_id': df1['sentence_id'], 'words': df1['words'], 'labels': df1['labels']})
+
+sentence_id_list = []
+
+sentence_id_seq = 0
+for word in df1['words'].tolist():
+    if word == "." or word == "?" or word == "!":
+        sentence_id_list.append(sentence_id_seq)
+        sentence_id_seq += 1
+    else:
+        sentence_id_list.append(sentence_id_seq)
+
+df1['sentence_id'] = sentence_id_list
 
 # df_train, df_test = [x for _, x in df1.groupby(df1['sentence_id'] >= 400)]
 
