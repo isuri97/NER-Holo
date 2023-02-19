@@ -110,22 +110,13 @@ for i in predictions:
         for v in h.keys():
             key_list.append(v)
 
-new1 = pd.DataFrame()
-new1['w'] = sentences
-new1['w'].to_csv('pred_sent-list.csv')
+pred_stats = pd.DataFrame()
+pred_stats['words']= key_list
+pred_stats['tags']= ll
 
-print('------')
-print(len(ll))
-print('======')
-# print(key_list)
+df1.to_csv('dataset.csv',index=False)
+pred_stats.to_csv('prediction_stats.csv',index=False)
 
-w_list = words.to_list()
-new2 = pd.DataFrame()
-new2['w'] = sentences
-new2['w'].to_csv('word-sent.csv')
-
-with open('predicted_tokens.txt','w') as f:
-    f.writelines(ll)
 
 df_test['predictions'] = ll
 
