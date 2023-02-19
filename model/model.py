@@ -69,10 +69,12 @@ train_df = pd.DataFrame(df_train, columns=["sentence_id", "words", "labels"])
 eval_df = pd.DataFrame(df_test, columns=["sentence_id", "words", "labels"])
 
 model_args = {
-    'train_batch_size': 64,
-    'eval_batch_size': 32,
+    'train_batch_size': 8,
+    'eval_batch_size': 4,
     'overwrite_output_dir':True,
     'num_train_epochs': 1,
+    'use_multiprocessing': False,
+    'use_multiprocessing_for_evaluation': False,
 }
 
 MODEL_NAME = arguments.model_name
