@@ -97,33 +97,58 @@ tag2index["--PADDING--"] = 0
 
 index2tag = {idx: word for word, idx in tag2index.items()}
 
-def to_tuples(data):
-    iterator = zip(df1["words"].values.tolist(),
-                   df1["labels"].values.tolist())
-    return [(word, tag) for word, tag in iterator]
-
-sentences = df1.groupby("sentence_id").apply(to_tuples).tolist()
+# def to_tuples(data):
+#     iterator = zip(df1["words"].values.tolist(),
+#                    df1["labels"].values.tolist())
+#     return [(word, tag) for word, tag in iterator]
 #
-print(df1)
-
-
-
-
-
-# X = [[word[0] for word in sentence] for sentence in sentences]
-# y = [[word[2] for word in sentence] for sentence in sentences]
-# print("X[0]:", X[0])
-# print("y[0]:", y[0])
+# sentences = df1.groupby("sentence_id").apply(to_tuples).tolist()
 #
-# X = [sentence + [word2index["--PADDING--"]] * (MAX_SENTENCE - len(sentence)) for sentence in X]
-# y = [sentence + [tag2index["--PADDING--"]] * (MAX_SENTENCE - len(sentence)) for sentence in y]
-# print("X[0]:", X[0])
-# print("y[0]:", y[0])
+# print(sentences[0])
+
+# words = df1['words']
+# lab = df1['labels']
+# sentences = []
+# lt = []
+# sentence = ""
+# lab_list=""
 #
-# TAG_COUNT = len(tag2index)
-# y = [ np.eye(TAG_COUNT)[sentence] for sentence in y]
-# print("X[0]:", X[0])
-# print("y[0]:", y[0])
+# for word, label in zip(words.to_list(), lab.to_list()):
+#     sentence += word + ","
+#     lab_list += label + ','
+#     if word == "." or word == "?" or word == "!":
+#         sentences.append(sentence.strip())
+#         lt.append(lab_list)
+#         sentence = ""
+#         lab_list = ""
+
+sentences = df1.groupby("sentence_id")[["words", "labels"]].agg(list)
+
+# print(sentences.iloc[0])
+
+X = sentences['words']
+y = sentences['labels']
+
+print(X[0])
+print(y[0])
+
+
+X = [[word2index[word] for word in sentence] for sentence in X]
+y = [[tag2index[tag] for tag in sentence] for sentence in y]
+print("X[0]:", X[0])
+print("y[0]:", y[0])
+#
+
+#
+X = [sentence + [word2index["--PADDING--"]] * (MAX_SENTENCE - len(sentence)) for sentence in X]
+y = [sentence + [tag2index["--PADDING--"]] * (MAX_SENTENCE - len(sentence)) for sentence in y]
+print("X[0]:", X[0])
+print("y[0]:", y[0])
+#
+TAG_COUNT = len(tag2index)
+y = [ np.eye(TAG_COUNT)[sentence] for sentence in y]
+print("X[0]:", X[0])
+print("y[0]:", y[0])
 #
 # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=1234)
 #
