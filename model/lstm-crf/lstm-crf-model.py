@@ -150,10 +150,10 @@ y = [ np.eye(TAG_COUNT)[sentence] for sentence in y]
 print("X[0]:", X[0])
 print("y[0]:", y[0])
 #
-# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=1234)
-#
-# print("Number of sentences in the training dataset: {}".format(len(X_train)))
-# print("Number of sentences in the test dataset : {}".format(len(X_test)))
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=1234)
+
+print("Number of sentences in the training dataset: {}".format(len(X_train)))
+print("Number of sentences in the test dataset : {}".format(len(X_test)))
 #
 # X_train = np.array(X_train)
 # X_test = np.array(X_test)
