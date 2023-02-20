@@ -24,21 +24,16 @@ df1 = pd.DataFrame({'document_id': df1['sentence_id'], 'words': df1['words'], 'l
 sentence_id_list = []
 
 sentence_id_seq = 0
-word_count = 0
+
 
 dropping_sentences = []
 
 for word in df1['words'].tolist():
-    word_count += 1
     if word == "." or word == "?" or word == "!":
         sentence_id_list.append(sentence_id_seq)
-        if word_count > 510:
-            dropping_sentences.append(sentence_id_seq)
         sentence_id_seq += 1
         word_count = 0
     else:
-        if word_count > 510:
-            dropping_sentences.append(sentence_id_seq)
         sentence_id_list.append(sentence_id_seq)
 
 df1['sentence_id'] = sentence_id_list
@@ -47,7 +42,7 @@ df1['sentence_id'] = sentence_id_list
 
 # df_train, df_test = [x for _, x in df1.groupby(df1['sentence_id'] >= 400)]
 
-df_train, df_test = train_test_split(df1, test_size=0.3)
+df_train, df_test = train_test_split(df1, test_size=0.1)
 
 print(f'training set size {len(df_train)}')
 print(f'test set size {len(df_test)}')
