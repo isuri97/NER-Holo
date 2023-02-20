@@ -80,7 +80,7 @@ for sentence in sentences:
 print(f'parity number is {total_count} and actual number is {len(words)}')
 
 model_args = NERArgs()
-model_args.train_batch_size = 64
+model_args.train_batch_size = 32
 model_args.eval_batch_size = 8
 model_args.overwrite_output_dir = True
 model_args.num_train_epochs = 1
