@@ -38,7 +38,7 @@ for word in df1['words'].tolist():
 df1['sentence_id'] = sentence_id_list
 
 sentence_ids = list(set(sentence_id_list))
-sentence_ids_train, sentence_ids_test = train_test_split(sentence_ids, test_size=0.1)
+sentence_ids_train, sentence_ids_test = train_test_split(sentence_ids[0:1000], test_size=0.1)
 # df2 = df1[df1['sentence_id'] not in dropping_sentences]
 
 # df_train, df_test = [x for _, x in df1.groupby(df1['sentence_id'] >= 400)]
@@ -126,7 +126,7 @@ key_list = []
 #         for v in h.keys():
 #             key_list.append(v)
 
-df_test["predictions"] = preds_list
+#df_test["predictions"] = preds_list
 
 # pred_stats = pd.DataFrame()
 # pred_stats['words'] = key_list
