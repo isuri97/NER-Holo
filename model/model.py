@@ -109,7 +109,7 @@ model.save_model()
 print(len(df_test))
 results, outputs, preds_list = model.eval_model(df_test)
 print(results)
-
+print(preds_list)
 ll = []
 key_list = []
 
