@@ -41,7 +41,7 @@ df1['sentence_id'] = sentence_id_list
 
 # df_train, df_test = [x for _, x in df1.groupby(df1['sentence_id'] >= 400)]
 
-df_train, df_test = train_test_split(df1, test_size=0.1)
+df_train, df_test = train_test_split(df1[0:1000], test_size=0.1)
 
 print(f'training set size {len(df_train)}')
 print(f'test set size {len(df_test)}')
@@ -50,7 +50,7 @@ print(f'test set size {len(df_test)}')
 words = df_test['words']
 sentence_ids = df_test['sentence_id']
 
-df_test = df_test.astype({'labels': 'string'})
+#df_test = df_test.astype({'labels': 'string'})
 
 sentences = []
 ids = []
@@ -132,7 +132,7 @@ df_test["predictions"] = preds_list
 # pred_stats.to_csv('prediction_stats.csv', index=False)
 #
 # df_test['predictions'] = ll
-df_test.to_csv("predictions.csv",index=False)
+df_test.to_csv("predictions.csv", index=False)
 y_true = df_test['labels']
 y_pred = df_test['predictions']
 
