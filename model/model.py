@@ -47,8 +47,7 @@ df1['sentence_id'] = sentence_id_list
 
 # df_train, df_test = [x for _, x in df1.groupby(df1['sentence_id'] >= 400)]
 
-df_train = df1
-df_test = df1
+df_train, df_test = train_test_split(df1, 0.3)
 
 print(f'training set size {len(df_train)}')
 print(f'test set size {len(df_test)}')
@@ -114,10 +113,8 @@ model = NERModel(
 # df_train, df_eval = train_test_split(df_train, test_size=0.2, random_state=777)
 # Train the model
 
-training_df = pd.DataFrame({'sentence_id': df1['sentence_id'], 'words': df1['words'], 'labels': df1['labels']})
-testing_df = pd.DataFrame({'sentence_id': df1['sentence_id'], 'words': df1['words'], 'labels': df1['labels']})
 
-model.train_model(training_df)
+model.train_model(df_train)
 
 predictions, outputs = model.predict(sentences)
 
