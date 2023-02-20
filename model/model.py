@@ -102,6 +102,7 @@ model = NERModel(
 
 
 model.train_model(df_train)
+model.save_model()
 
 # predictions, outputs = model.predict(sentences)
 
