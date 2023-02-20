@@ -106,7 +106,7 @@ model.save_model()
 
 # predictions, outputs = model.predict(sentences)
 
-
+print(len(df_test))
 results, outputs, preds_list = model.eval_model(df_test)
 print(results)
 
