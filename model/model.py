@@ -48,6 +48,7 @@ print(f'test set size {len(df_test)}')
 
 # concatenate words till . and add comma
 words = df_test['words']
+tags = df_test['labels']
 sentence_ids = df_test['sentence_id']
 
 df_test = df_test.astype({'labels': 'string'})
@@ -56,17 +57,27 @@ sentences = []
 ids = []
 sentence = ""
 word_count = 0
-for word, s_id in zip(words.to_list(), sentence_ids.to_list()):
+sentence_tokens = []
+for word, s_id,tag in zip(words.to_list(), sentence_ids.to_list(),tags.to_list()):
     word_count += 1
-    sentence += word + " "
+    sentence_tokens.append(token)
     if word == "." or word == "?" or word == "!":
         sentences.append(sentence.strip())
         ids.append(s_id)
         word_count = 0
         sentence = ""
 
+# for word, s_id,tag in zip(words.to_list(), sentence_ids.to_list(),tags.to_list()):
+#     word_count += 1
+#     sentence += word + " "
+#     if word == "." or word == "?" or word == "!":
+#         sentences.append(sentence.strip())
+#         ids.append(s_id)
+#         word_count = 0
+#         sentence = ""
+
 model_args = NERArgs()
-model_args.train_batch_size = 32
+model_args.train_batch_size = 64
 model_args.eval_batch_size = 8
 model_args.overwrite_output_dir = True
 model_args.num_train_epochs = 1
@@ -104,6 +115,11 @@ model = NERModel(
 model.train_model(df_train)
 
 results, outputs, preds_list = model.eval_model(df_test)
+print(results)
+
+
+
+model.predict()
 
 ll = []
 key_list = []
