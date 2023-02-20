@@ -62,14 +62,14 @@ df_test = df_test.astype({'labels': 'string'})
 sentences = []
 ids = []
 sentence = ""
-word_count=0
+word_count = 0
 for word, s_id in zip(words.to_list(), sentence_ids.to_list()):
-    word_count+=1
+    word_count += 1
     sentence += word + " "
     if word == "." or word == "?" or word == "!":
         sentences.append(sentence.strip())
         ids.append(s_id)
-        word_count=0
+        word_count = 0
         sentence = ""
 
 # parity check
@@ -79,14 +79,26 @@ for sentence in sentences:
 
 print(f'parity number is {total_count} and actual number is {len(words)}')
 
-model_args = {
-    'train_batch_size': 64,
-    'eval_batch_size': 8,
-    'overwrite_output_dir': True,
-    'num_train_epochs': 1,
-    'use_multiprocessing': False,
-    'use_multiprocessing_for_evaluation': False,
-}
+model_args = NERArgs()
+model_args.train_batch_size = 64
+model_args.eval_batch_size = 8
+model_args.overwrite_output_dir = True
+model_args.num_train_epochs = 1
+model_args.use_multiprocessing = False
+model_args.use_multiprocessing_for_evaluation = False
+model_args.classification_report = True
+model_args.labels_list = ['O', 'B-DATE', 'B-PERSON', 'B-GPE', 'B-ORG', 'I-ORG', 'B-CARDINAL', 'B-LANGUAGE',
+                          'B-EVENT', 'I-DATE', 'B-NORP', 'B-TIME', 'I-TIME', 'I-GPE', 'B-ORDINAL', 'I-PERSON',
+                          'B-MILITARY',
+                          'I-MILITARY', 'I-NORP', 'B-CAMP', 'I-EVENT', 'I-CARDINAL', 'B-LAW', 'I-LAW', 'B-QUANTITY',
+                          'B-RIVER',
+                          'I-RIVER', 'B-PERCENT', 'I-PERCENT', 'B-WORK_OF_ART', 'I-QUANTITY', 'B-FAC', 'I-FAC',
+                          'I-WORK_OF_ART',
+                          'B-MONEY', 'I-MONEY', 'B-STREET', 'I-STREET', 'B-LOC', 'B-GHETTO', 'B-SEA-OCEAN',
+                          'I-SEA-OCEAN',
+                          'B-PRODUCT', 'I-CAMP', 'I-LOC', 'I-PRODUCT', 'I-GHETTO', 'B-SPOUSAL', 'I-SPOUSAL', 'B-SHIP',
+                          'I-SHIP',
+                          'B-FOREST', 'I-FOREST', 'B-GROUP', 'I-GROUP', 'B-MOUNTAIN', 'I-MOUNTAIN']
 
 MODEL_NAME = arguments.model_name
 MODEL_TYPE = arguments.model_type
@@ -97,13 +109,6 @@ model = NERModel(
     use_cuda=torch.cuda.is_available(),
     cuda_device=cuda_device,
     args=model_args,
-    labels=['O', 'B-DATE', 'B-PERSON', 'B-GPE', 'B-ORG', 'I-ORG', 'B-CARDINAL', 'B-LANGUAGE',
-            'B-EVENT', 'I-DATE', 'B-NORP', 'B-TIME', 'I-TIME', 'I-GPE', 'B-ORDINAL', 'I-PERSON', 'B-MILITARY',
-            'I-MILITARY', 'I-NORP', 'B-CAMP', 'I-EVENT', 'I-CARDINAL', 'B-LAW', 'I-LAW', 'B-QUANTITY', 'B-RIVER',
-            'I-RIVER', 'B-PERCENT', 'I-PERCENT', 'B-WORK_OF_ART', 'I-QUANTITY', 'B-FAC', 'I-FAC', 'I-WORK_OF_ART',
-            'B-MONEY', 'I-MONEY', 'B-STREET', 'I-STREET', 'B-LOC', 'B-GHETTO', 'B-SEA-OCEAN', 'I-SEA-OCEAN',
-            'B-PRODUCT', 'I-CAMP', 'I-LOC', 'I-PRODUCT', 'I-GHETTO', 'B-SPOUSAL', 'I-SPOUSAL', 'B-SHIP', 'I-SHIP',
-            'B-FOREST', 'I-FOREST', 'B-GROUP', 'I-GROUP', 'B-MOUNTAIN', 'I-MOUNTAIN']
 )
 
 # df_train, df_eval = train_test_split(df_train, test_size=0.2, random_state=777)
