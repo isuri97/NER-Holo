@@ -65,13 +65,6 @@ for word, s_id in zip(words.to_list(), sentence_ids.to_list()):
         word_count = 0
         sentence = ""
 
-# parity check
-total_count = 0
-for sentence in sentences:
-    total_count += len(sentence.split(' '))
-
-print(f'parity number is {total_count} and actual number is {len(words)}')
-
 model_args = NERArgs()
 model_args.train_batch_size = 32
 model_args.eval_batch_size = 8
