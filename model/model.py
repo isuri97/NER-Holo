@@ -19,12 +19,11 @@ parser.add_argument('--train', required=False, help='train file', default='data/
 arguments = parser.parse_args()
 
 df1 = pd.read_csv('data/new/cleaned/dataset.csv')
-df1 = pd.DataFrame({'document_id': df1['sentence_id'], 'words': df1['words'], 'labels': df1['labels']})
+df1 = pd.DataFrame({'document_id': df1['document_id'], 'words': df1['words'], 'labels': df1['labels']})
 
 sentence_id_list = []
 
 sentence_id_seq = 0
-
 
 dropping_sentences = []
 
@@ -103,6 +102,7 @@ model = NERModel(
     use_cuda=torch.cuda.is_available(),
     cuda_device=cuda_device,
     args=model_args,
+    drop_last=True
 )
 
 # df_train, df_eval = train_test_split(df_train, test_size=0.2, random_state=777)
