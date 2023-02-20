@@ -47,7 +47,7 @@ df1['sentence_id'] = sentence_id_list
 
 # df_train, df_test = [x for _, x in df1.groupby(df1['sentence_id'] >= 400)]
 
-df_train, df_test = train_test_split(df1, 0.3)
+df_train, df_test = train_test_split(df1, test_size=0.3)
 
 print(f'training set size {len(df_train)}')
 print(f'test set size {len(df_test)}')
