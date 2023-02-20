@@ -67,7 +67,7 @@ for word, s_id in zip(words.to_list(), sentence_ids.to_list()):
 
 model_args = NERArgs()
 model_args.train_batch_size = 64
-model_args.eval_batch_size = 8
+model_args.eval_batch_size = 64
 model_args.overwrite_output_dir = True
 model_args.num_train_epochs = 1
 model_args.use_multiprocessing = False
@@ -121,15 +121,17 @@ key_list = []
 #         for v in h.keys():
 #             key_list.append(v)
 
-pred_stats = pd.DataFrame()
-pred_stats['words'] = key_list
-pred_stats['tags'] = ll
+df_test["predictions"] = preds_list
 
-df1.to_csv('dataset.csv', index=False)
-pred_stats.to_csv('prediction_stats.csv', index=False)
-
-df_test['predictions'] = ll
-
+# pred_stats = pd.DataFrame()
+# pred_stats['words'] = key_list
+# pred_stats['tags'] = ll
+#
+# df1.to_csv('dataset.csv', index=False)
+# pred_stats.to_csv('prediction_stats.csv', index=False)
+#
+# df_test['predictions'] = ll
+df_test.to_csv("predictions.csv",index=False)
 y_true = df_test['labels']
 y_pred = df_test['predictions']
 
