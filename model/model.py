@@ -41,7 +41,7 @@ df1['sentence_id'] = sentence_id_list
 
 # df_train, df_test = [x for _, x in df1.groupby(df1['sentence_id'] >= 400)]
 
-df_train, df_test = train_test_split(df1[0:1000], test_size=0.1)
+df_train, df_test = train_test_split(df1, test_size=0.1)
 
 print(f'training set size {len(df_train)}')
 print(f'test set size {len(df_test)}')
@@ -67,7 +67,7 @@ for word, s_id in zip(words.to_list(), sentence_ids.to_list()):
 
 model_args = NERArgs()
 model_args.train_batch_size = 64
-model_args.eval_batch_size = 1
+model_args.eval_batch_size = 64
 model_args.overwrite_output_dir = True
 model_args.num_train_epochs = 1
 model_args.use_multiprocessing = False
