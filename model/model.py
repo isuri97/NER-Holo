@@ -140,11 +140,11 @@ pred_stats['tags'] = ll
 df1.to_csv('dataset.csv', index=False)
 pred_stats.to_csv('prediction_stats.csv', index=False)
 
-testing_df['predictions'] = ll
+df_test['predictions'] = ll
 
 y_true = df_test['labels']
 y_pred = df_test['predictions']
 
-# print(metrics.confusion_matrix(y_true, y_pred))
+print(metrics.confusion_matrix(y_true, y_pred))
 with open('metrics.txt', 'w') as f:
     f.write(metrics.classification_report(y_true, y_pred, digits=7))
