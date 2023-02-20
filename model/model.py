@@ -102,7 +102,6 @@ model = NERModel(
     use_cuda=torch.cuda.is_available(),
     cuda_device=cuda_device,
     args=model_args,
-    drop_last=True
 )
 
 # df_train, df_eval = train_test_split(df_train, test_size=0.2, random_state=777)
