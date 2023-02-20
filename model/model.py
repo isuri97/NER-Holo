@@ -103,19 +103,19 @@ model = NERModel(
 
 model.train_model(df_train)
 
-predictions, outputs = model.predict(sentences)
+results, outputs, preds_list = model.eval_model(df_test)
 
 ll = []
 key_list = []
 
-for i in predictions:
-    for h in i:
-        for v in h.values():
-            ll.append(v)
-for i in predictions:
-    for h in i:
-        for v in h.keys():
-            key_list.append(v)
+# for i in predictions:
+#     for h in i:
+#         for v in h.values():
+#             ll.append(v)
+# for i in predictions:
+#     for h in i:
+#         for v in h.keys():
+#             key_list.append(v)
 
 pred_stats = pd.DataFrame()
 pred_stats['words'] = key_list
