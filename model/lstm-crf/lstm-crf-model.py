@@ -14,8 +14,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import multilabel_confusion_matrix
 from keras_contrib.utils import save_load_utils
 
-
-from keras.models import Model, Input,Sequential
+#
+# from keras.models import Model, Input,Sequential
 from keras.layers import LSTM, Embedding, Dense, TimeDistributed, Dropout, Bidirectional
 from keras_contrib.layers import CRF
 import keras as k
@@ -52,7 +52,7 @@ from keras_contrib import metrics
 # df1 = df1[~df1['words'].str.contains(':')]
 # df1 = df1[~df1['words'].str.contains(' ')]
 
-df1 = pd.read_csv('data/new/cleaned/dataset.csv')
+df1 = pd.read_csv('test.csv')
 
 sentence_id_list=[]
 sentence_id_seq = 0
@@ -202,17 +202,17 @@ model.summary()
 # ner_model.summary()
 
 
-model = Sequential()
-model.add(Embedding(input_dim=WORD_COUNT, output_dim=200, input_length=MAX_SENTENCE))
-model.add(Dropout(0.5))
-model.add(Bidirectional(LSTM(units=128, return_sequences=True, recurrent_dropout=0.1)))
-model.add(TimeDistributed(Dense(DENSE_UNITS, activation="relu")))
-crf_layer = CRF(units=TAG_COUNT)
-model.add(crf_layer)
-model.summary()
+# model = Sequential()
+# model.add(Embedding(input_dim=WORD_COUNT, output_dim=200, input_length=MAX_SENTENCE))
+# model.add(Dropout(0.5))
+# model.add(Bidirectional(LSTM(units=128, return_sequences=True, recurrent_dropout=0.1)))
+# model.add(TimeDistributed(Dense(DENSE_UNITS, activation="relu")))
+# crf_layer = CRF(units=TAG_COUNT)
+# model.add(crf_layer)
+# model.summary()
 
-model.compile(optimizer='adam', loss=crf_layer.loss_function, metrics=[crf_layer.accuracy])
-
+# model.compile(optimizer='adam', loss=crf_layer.loss_function, metrics=[crf_layer.accuracy])
+#
 
 history = model.fit(X_train, y_train, batch_size=BATCH_SIZE, epochs=MAX_EPOCHS, validation_split=0.1, verbose=2)
 
