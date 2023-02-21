@@ -144,4 +144,4 @@ key_list = []
 #with open('metrics.txt', 'w') as f:
 #    f.write(metrics.classification_report(y_true, y_pred, digits=7))
 
-print(metrics.classification_report(truths,preds))
+print(metrics.classification_report(truths,preds,digits=4))
