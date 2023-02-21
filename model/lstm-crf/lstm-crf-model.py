@@ -183,7 +183,8 @@ MAX_EPOCHS = 50
 #
 
 
-from keras.models import Model, Input
+from keras.models import Model
+from tensorflow.python.keras.models import Input
 from keras.layers import LSTM, Embedding, Dense, TimeDistributed, Dropout, Bidirectional
 from keras_contrib.layers import CRF
 # Model definition
