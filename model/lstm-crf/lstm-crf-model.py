@@ -2,8 +2,6 @@ import pandas as pd
 
 import pickle
 import operator
-import re
-import string
 import pandas as pd
 import keras.backend as k
 import numpy as np
@@ -52,7 +50,8 @@ from keras_contrib import metrics
 # df1 = df1[~df1['words'].str.contains(':')]
 # df1 = df1[~df1['words'].str.contains(' ')]
 
-df1 = pd.read_csv('data/new/cleaned/dataset.csv')
+df1 = pd.read_csv('testing.csv')
+
 
 sentence_id_list=[]
 sentence_id_seq = 0
@@ -65,7 +64,20 @@ for word in df1['words'].tolist():
 
 df1['sentence_id'] = sentence_id_list
 
+sentence_ids = list(set(sentence_id_list))
+sentence_ids_train, sentence_ids_test = train_test_split(sentence_ids, test_size=0.3)
+# df2 = df1[df1['sentence_id'] not in dropping_sentences]
 
+# df_train, df_test = [x for _, x in df1.groupby(df1['sentence_id'] >= 400)]
+
+df_train = df1[df1["sentence_id"].isin(sentence_ids_train)]
+df_test = df1[df1["sentence_id"].isin(sentence_ids_test)]#train_test_split(df1, test_size=0.1)
+
+print(f'training set size {len(df_train)}')
+print(f'test set size {len(df_test)}')
+
+
+# df_train
 
 all_words = list(set(df1["words"].values))
 all_tags = list(set(df1["labels"].values))
