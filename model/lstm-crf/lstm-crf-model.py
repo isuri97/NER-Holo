@@ -252,6 +252,9 @@ y_te_true_tag = [[index2tag[i] for i in row] for row in y_te_true]
 report = flat_classification_report(y_pred=pred_tag, y_true=y_te_true_tag)
 print(report)
 
+with open('metrics.txt', 'w') as f:
+   f.write(flat_classification_report(y_pred=pred_tag, y_true=y_te_true_tag, digit=4))
+
 
 # Plot training & validation accuracy values
 plt.plot(history.history['crf_viterbi_accuracy'])
