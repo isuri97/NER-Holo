@@ -50,7 +50,7 @@ from keras_contrib import metrics
 # df1 = df1[~df1['words'].str.contains(':')]
 # df1 = df1[~df1['words'].str.contains(' ')]
 
-df1 = pd.read_csv('test.csv')
+df1 = pd.read_csv('testing.csv')
 
 
 sentence_id_list=[]
