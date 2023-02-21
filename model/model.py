@@ -114,34 +114,5 @@ print(len(df_test))
 results, outputs, preds_list, truths, preds = model.eval_model(df_test)
 print(results)
 preds_list = [tag for s in preds_list for tag in s]
-ll = []
-key_list = []
-
-# for i in predictions:
-#     for h in i:
-#         for v in h.values():
-#             ll.append(v)
-# for i in predictions:
-#     for h in i:
-#         for v in h.keys():
-#             key_list.append(v)
-
-#df_test["predictions"] = preds_list
-
-# pred_stats = pd.DataFrame()
-# pred_stats['words'] = key_list
-# pred_stats['tags'] = ll
-#
-# df1.to_csv('dataset.csv', index=False)
-# pred_stats.to_csv('prediction_stats.csv', index=False)
-#
-# df_test['predictions'] = ll
-#df_test.to_csv("predictions.csv", index=False)
-#y_true = df_test['labels']
-#y_pred = df_test['predictions']
-
-#print(metrics.confusion_matrix(y_true, y_pred))
-#with open('metrics.txt', 'w') as f:
-#    f.write(metrics.classification_report(y_true, y_pred, digits=7))
 
 print(metrics.classification_report(truths,preds,digits=4))
