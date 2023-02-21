@@ -13,7 +13,7 @@ from sklearn.metrics import multilabel_confusion_matrix
 from keras_contrib.utils import save_load_utils
 
 #
-# from keras.models import Model, Input,Sequential
+from keras.models import Model, Sequential
 from keras.layers import LSTM, Embedding, Dense, TimeDistributed, Dropout, Bidirectional
 from keras_contrib.layers import CRF
 import keras as k
@@ -50,7 +50,7 @@ from keras_contrib import metrics
 # df1 = df1[~df1['words'].str.contains(':')]
 # df1 = df1[~df1['words'].str.contains(' ')]
 
-df1 = pd.read_csv('testing.csv')
+df1 = pd.read_csv('test.csv')
 
 
 sentence_id_list=[]
@@ -179,7 +179,7 @@ LSTM_UNITS = 50
 LSTM_DROPOUT = 0.1
 DENSE_UNITS = 100
 BATCH_SIZE = 256
-MAX_EPOCHS = 50
+MAX_EPOCHS = 5
 #
 
 
@@ -188,17 +188,17 @@ from tensorflow.python.keras.models import Input
 from keras.layers import LSTM, Embedding, Dense, TimeDistributed, Dropout, Bidirectional
 from keras_contrib.layers import CRF
 # Model definition
-input = Input(shape=(MAX_SENTENCE,))
-model = Embedding(input_dim=WORD_COUNT+2, output_dim=DENSE_EMBEDDING, # n_words + 2 (PAD & UNK)
-                  input_length=MAX_SENTENCE, mask_zero=True)(input)  # default: 20-dim embedding
-model = Bidirectional(LSTM(units=50, return_sequences=True,
-                           recurrent_dropout=0.1))(model)  # variational biLSTM
-model = TimeDistributed(Dense(50, activation="relu"))(model)  # a dense layer as suggested by neuralNer
-crf = CRF(WORD_COUNT+1)  # CRF layer, n_tags+1(PAD)
-out = crf(model)  # output
-model = Model(input, out)
-model.compile(optimizer="rmsprop", loss=crf.loss_function, metrics=[crf.accuracy])
-model.summary()
+# input = Input(shape=(MAX_SENTENCE,))
+# model = Embedding(input_dim=WORD_COUNT+2, output_dim=DENSE_EMBEDDING, # n_words + 2 (PAD & UNK)
+#                   input_length=MAX_SENTENCE, mask_zero=True)(input)  # default: 20-dim embedding
+# model = Bidirectional(LSTM(units=50, return_sequences=True,
+#                            recurrent_dropout=0.1))(model)  # variational biLSTM
+# model = TimeDistributed(Dense(50, activation="relu"))(model)  # a dense layer as suggested by neuralNer
+# crf = CRF(WORD_COUNT+1)  # CRF layer, n_tags+1(PAD)
+# out = crf(model)  # output
+# model = Model(input, out)
+# model.compile(optimizer="rmsprop", loss=crf.loss_function, metrics=[crf.accuracy])
+# model.summary()
 
 #
 # input_layer = layers.Input(shape=(MAX_SENTENCE,))
@@ -215,17 +215,17 @@ model.summary()
 # ner_model.summary()
 
 
-# model = Sequential()
-# model.add(Embedding(input_dim=WORD_COUNT, output_dim=200, input_length=MAX_SENTENCE))
-# model.add(Dropout(0.5))
-# model.add(Bidirectional(LSTM(units=128, return_sequences=True, recurrent_dropout=0.1)))
-# model.add(TimeDistributed(Dense(DENSE_UNITS, activation="relu")))
-# crf_layer = CRF(units=TAG_COUNT)
-# model.add(crf_layer)
-# model.summary()
+model = Sequential()
+model.add(Embedding(input_dim=WORD_COUNT, output_dim=200, input_length=MAX_SENTENCE))
+model.add(Dropout(0.5))
+model.add(Bidirectional(LSTM(units=128, return_sequences=True, recurrent_dropout=0.1)))
+model.add(TimeDistributed(Dense(DENSE_UNITS, activation="relu")))
+crf_layer = CRF(units=TAG_COUNT)
+model.add(crf_layer)
+model.summary()
 
-# model.compile(optimizer='adam', loss=crf_layer.loss_function, metrics=[crf_layer.accuracy])
-#
+model.compile(optimizer='adam', loss=crf_layer.loss_function, metrics=[crf_layer.accuracy])
+
 
 history = model.fit(X_train, y_train, batch_size=BATCH_SIZE, epochs=MAX_EPOCHS, validation_split=0.1, verbose=2)
 
