@@ -50,7 +50,7 @@ from keras_contrib import metrics
 # df1 = df1[~df1['words'].str.contains(':')]
 # df1 = df1[~df1['words'].str.contains(' ')]
 
-df1 = pd.read_csv('test.csv')
+df1 = pd.read_csv('testing.csv')
 
 
 sentence_id_list=[]
@@ -178,8 +178,8 @@ DENSE_EMBEDDING = 50
 LSTM_UNITS = 50
 LSTM_DROPOUT = 0.1
 DENSE_UNITS = 100
-BATCH_SIZE = 256
-MAX_EPOCHS = 5
+BATCH_SIZE = 128
+MAX_EPOCHS = 30
 #
 
 
@@ -252,6 +252,9 @@ y_te_true_tag = [[index2tag[i] for i in row] for row in y_te_true]
 
 report = flat_classification_report(y_pred=pred_tag, y_true=y_te_true_tag)
 print(report)
+
+with open('metrics.txt', 'w') as f:
+   f.write(flat_classification_report(y_pred=pred_tag, y_true=y_te_true_tag, digit=4))
 
 
 # Plot training & validation accuracy values
