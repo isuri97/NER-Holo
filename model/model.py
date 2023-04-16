@@ -117,8 +117,7 @@ preds_list = [tag for s in preds_list for tag in s]
 ll = []
 key_list = []
 
-print(truths)
-print(preds)
+
 df_test['original_test_set'] = truths
 df_test['predicted_set'] = preds
 
