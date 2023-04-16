@@ -76,7 +76,7 @@ model_args.num_train_epochs = 1
 model_args.use_multiprocessing = False
 model_args.use_multiprocessing_for_evaluation = False
 model_args.classification_report = True
-model_args.wandb_project="holo-ner"
+# model_args.wandb_project="holo-ner"
 model_args.labels_list = ['O', 'B-DATE', 'B-PERSON', 'B-GPE', 'B-ORG', 'I-ORG', 'B-CARDINAL', 'B-LANGUAGE',
                           'B-EVENT', 'I-DATE', 'B-NORP', 'B-TIME', 'I-TIME', 'I-GPE', 'B-ORDINAL', 'I-PERSON',
                           'B-MILITARY',
@@ -155,7 +155,10 @@ labels = ['B-SHIP', 'I-SHIP','B-GHETTO', 'I-GHETTO', 'B-STREET', 'I-STREET', 'B-
 #with open('metrics.txt', 'w') as f:
 #    f.write(metrics.classification_report(y_true, y_pred, digits=7))
 
-print(truths)
+ct = len(truths)
+pt = len(preds)
+
+print(ct)
 print(preds)
 
 print(metrics.classification_report(truths,preds,digits=4))
