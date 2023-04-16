@@ -162,6 +162,59 @@ labels = ['B-SHIP', 'I-SHIP','B-GHETTO', 'I-GHETTO', 'B-STREET', 'I-STREET', 'B-
 
 print(metrics.classification_report(truths,preds,digits=4))
 
-new_df= pd.DataFrame({'truth set':truths,'pred set':preds})
+new_df= pd.DataFrame({'truthset':truths,'predset':preds})
 
 print(new_df)
+
+import numpy as np
+from collections import Counter
+
+# Example truth set and predicted set of NER tags
+# truth_set = ['ORG', 'LOC', 'PER', 'LOC', 'MISC', 'PER', 'PER']
+# predicted_set = ['ORG', 'LOC', 'PER', 'MISC', 'MISC', 'LOC', 'LOC']
+
+truth_set = new_df['truthset']
+predicted_set = new_df['predset']
+
+# Get unique tags from truth set and predicted set
+unique_tags = list(set(truth_set + predicted_set))
+
+# Create an empty 2D matrix to represent the counts
+confusion_matrix = np.zeros((len(unique_tags), len(unique_tags)), dtype=int)
+
+# Create dictionary to map tags to index in confusion matrix
+tag_to_index = {tag: i for i, tag in enumerate(unique_tags)}
+
+# Count occurrences of individual tags in truth set and predicted set
+truth_set_counts = Counter(truth_set)
+predicted_set_counts = Counter(predicted_set)
+
+# Iterate through each tag combination in truth set and predicted set
+for truth_tag in unique_tags:
+    for predicted_tag in unique_tags:
+        # Get the corresponding indices in the confusion matrix
+        truth_index = tag_to_index[truth_tag]
+        predicted_index = tag_to_index[predicted_tag]
+
+        # Get the count of occurrences in truth set and predicted set
+        truth_count = truth_set_counts[truth_tag]
+        predicted_count = predicted_set_counts[predicted_tag]
+
+        # Get the count of occurrences where truth tag and predicted tag match
+        matching_count = sum(1 for t, p in zip(truth_set, predicted_set) if t == truth_tag and p == predicted_tag)
+
+        # Set the count in the confusion matrix
+        confusion_matrix[truth_index][predicted_index] = matching_count
+
+# Print the confusion matrix
+print("Confusion Matrix:")
+for tag in unique_tags:
+    print(f"\t{tag}", end="")
+print()
+with open('out1.txt', 'w') as f:
+    with redirect_stdout(f):
+        for i, row in enumerate(confusion_matrix):
+            print(f"{unique_tags[i]}\t", end="")
+            for count in row:
+                print(f"{count}\t", end="")
+            print()
