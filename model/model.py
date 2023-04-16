@@ -154,11 +154,11 @@ labels = ['B-SHIP', 'I-SHIP','B-GHETTO', 'I-GHETTO', 'B-STREET', 'I-STREET', 'B-
 #with open('metrics.txt', 'w') as f:
 #    f.write(metrics.classification_report(y_true, y_pred, digits=7))
 
-ct = len(truths)
-pt = len(preds)
-
-print(ct)
-print(preds)
+# ct = len(truths)
+# pt = len(preds)
+#
+# print(ct)
+# print(preds)
 
 print(metrics.classification_report(truths,preds,digits=4))
 
