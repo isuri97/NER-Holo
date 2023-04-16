@@ -1,6 +1,6 @@
 import pandas as pd
 
-df1 = pd.read_csv('data/new/testing.csv')
+df1 = pd.read_csv('data/testing.csv')
 df1 = pd.DataFrame({'document_id': df1['sentence_id'], 'words': df1['words'], 'labels': df1['labels']})
 
 sentence_id_list = []
@@ -15,5 +15,5 @@ for word in df1['words'].tolist():
 
 df1['sentence_id'] = sentence_id_list
 
-print('a')
+# print('a')
 
