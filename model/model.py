@@ -118,8 +118,8 @@ ll = []
 key_list = []
 
 
-df_test['original_test_set'] = truths
-df_test['predicted_set'] = preds
+# df_test['original_test_set'] = truths
+# df_test['predicted_set'] = preds
 
 # take the label and count is it match with
 
