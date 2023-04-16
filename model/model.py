@@ -162,11 +162,6 @@ labels = ['B-SHIP', 'I-SHIP','B-GHETTO', 'I-GHETTO', 'B-STREET', 'I-STREET', 'B-
 
 print(metrics.classification_report(truths,preds,digits=4))
 
-df_test['original_test_set'] = truths
-df_test['predicted_set'] = preds
+new_df= pd.DataFrame({'truth set':truths,'pred set':preds})
 
-result_trt = df_test['original_test_set'] .head(10)
-result_prd = df_test['predicted_set']. head(10)
-
-print(result_trt)
-print(result_prd)
+print(new_df)
