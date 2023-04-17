@@ -237,3 +237,24 @@ for t, p in zip(truth_set, predicted_set):
 
 
 print(confusion_dict)
+
+lst = ['B-CAMP', 'I-CAMP', 'B-SHIP', 'I-SHIP','B-GHETTO', 'I-GHETTO', 'B-PERSON', 'I-PERSON', 'B-STREET', 'I-STREET', 'B-DATE', 'I-DATE',\
+'B-GPE', 'I-GPE', 'B-TIME', 'I-TIME', 'B-EVENT', 'I-EVENT','B-MILITARY', 'I-MILITARY', 'B-ORG', 'I-ORG' ]
+
+final_list = []
+for tag in lst:
+    preds_dict = confusion_dict[tag]
+    print(preds_dict)
+    new_list = []
+    for i in lst:
+        if preds_dict.keys().__contains__(i):
+            count = preds_dict[i]
+        else:
+            count = 0
+        new_list.append(count)
+    final_list.append(new_list)
+
+print(final_list)
+
+
+
