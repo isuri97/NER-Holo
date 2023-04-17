@@ -44,7 +44,7 @@ sentence_ids_train, sentence_ids_test = train_test_split(sentence_ids, test_size
 # df_train, df_test = [x for _, x in df1.groupby(df1['sentence_id'] >= 400)]
 
 df_train = df1[df1["sentence_id"].isin(sentence_ids_train)]
-df_test = df1[df1["sentence_id"].isin(sentence_ids_test)]#train_test_split(df1, test_size=0.1)
+df_test = df1[df1["sentence_id"].isin(sentence_ids_test)]  # train_test_split(df1, test_size=0.1)
 
 print(f'training set size {len(df_train)}')
 print(f'test set size {len(df_test)}')
@@ -53,7 +53,7 @@ print(f'test set size {len(df_test)}')
 words = df_test['words']
 sentence_ids = df_test['sentence_id']
 
-#df_test = df_test.astype({'labels': 'string'})
+# df_test = df_test.astype({'labels': 'string'})
 
 sentences = []
 ids = []
@@ -117,15 +117,14 @@ preds_list = [tag for s in preds_list for tag in s]
 ll = []
 key_list = []
 
-
 # df_test['original_test_set'] = truths
 # df_test['predicted_set'] = preds
 
 # take the label and count is it match with
 
-labels = ['B-SHIP', 'I-SHIP','B-GHETTO', 'I-GHETTO', 'B-STREET', 'I-STREET', 'B-MILITARY', 'I-MILITARY', 'B-DATE', 'I-DATE', 'B-PERSON', 'I-PERSON',
+labels = ['B-SHIP', 'I-SHIP', 'B-GHETTO', 'I-GHETTO', 'B-STREET', 'I-STREET', 'B-MILITARY', 'I-MILITARY', 'B-DATE',
+          'I-DATE', 'B-PERSON', 'I-PERSON',
           'B-GPE', 'I-GPE', 'B-TIME', 'I-TIME', 'B-EVENT', 'I-EVENT', 'B-ORG', 'I-ORG', 'B-TIME', 'I-TIME']
-
 
 # for i in predictions:
 #     for h in i:
@@ -136,7 +135,7 @@ labels = ['B-SHIP', 'I-SHIP','B-GHETTO', 'I-GHETTO', 'B-STREET', 'I-STREET', 'B-
 #         for v in h.keys():
 #             key_list.append(v)
 
-#df_test["predictions"] = preds_list
+# df_test["predictions"] = preds_list
 
 # pred_stats = pd.DataFrame()
 # pred_stats['words'] = key_list
@@ -146,12 +145,12 @@ labels = ['B-SHIP', 'I-SHIP','B-GHETTO', 'I-GHETTO', 'B-STREET', 'I-STREET', 'B-
 # pred_stats.to_csv('prediction_stats.csv', index=False)
 #
 # df_test['predictions'] = ll
-#df_test.to_csv("predictions.csv", index=False)
-#y_true = df_test['labels']
-#y_pred = df_test['predictions']
+# df_test.to_csv("predictions.csv", index=False)
+# y_true = df_test['labels']
+# y_pred = df_test['predictions']
 
-#print(metrics.confusion_matrix(y_true, y_pred))
-#with open('metrics.txt', 'w') as f:
+# print(metrics.confusion_matrix(y_true, y_pred))
+# with open('metrics.txt', 'w') as f:
 #    f.write(metrics.classification_report(y_true, y_pred, digits=7))
 
 # ct = len(truths)
@@ -160,9 +159,9 @@ labels = ['B-SHIP', 'I-SHIP','B-GHETTO', 'I-GHETTO', 'B-STREET', 'I-STREET', 'B-
 # print(ct)
 # print(preds)
 
-print(metrics.classification_report(truths,preds,digits=4))
+print(metrics.classification_report(truths, preds, digits=4))
 
-new_df= pd.DataFrame({'truthset':truths,'predset':preds})
+new_df = pd.DataFrame({'truthset': truths, 'predset': preds})
 
 print(new_df)
 
@@ -176,45 +175,65 @@ from collections import Counter
 truth_set = new_df['truthset']
 predicted_set = new_df['predset']
 
-# Get unique tags from truth set and predicted set
-unique_tags = list(set(truth_set + predicted_set))
+# # Get unique tags from truth set and predicted set
+# unique_tags = list(set(truth_set + predicted_set))
+#
+# # Create an empty 2D matrix to represent the counts
+# confusion_matrix = np.zeros((len(unique_tags), len(unique_tags)), dtype=int)
+#
+# # Create dictionary to map tags to index in confusion matrix
+# tag_to_index = {tag: i for i, tag in enumerate(unique_tags)}
+#
+# # Count occurrences of individual tags in truth set and predicted set
+# truth_set_counts = Counter(truth_set)
+# predicted_set_counts = Counter(predicted_set)
+#
+# for truth_tag in unique_tags:
+#     for predicted_tag in unique_tags:
+#         # Get the corresponding indices in the confusion matrix
+#         truth_index = tag_to_index[truth_tag]
+#         predicted_index = tag_to_index[predicted_tag]
+#
+#         # Get the count of occurrences in truth set and predicted set
+#         truth_count = truth_set_counts[truth_tag]
+#         predicted_count = predicted_set_counts[predicted_tag]
+#         matching_count = sum(1 for t, p in zip(truth_set, predicted_set) if t == truth_tag and p == predicted_tag)
+#         confusion_matrix[truth_index][predicted_index] = matching_count
+#
+# # Print the confusion matrix
+# print("Confusion Matrix:")
+# for tag in unique_tags:
+#     print(f"\t{tag}", end="")
+# print()
+# with open('out1.txt', 'w') as f:
+#     with redirect_stdout(f):
+#         for i, row in enumerate(confusion_matrix):
+#             print(f"{unique_tags[i]}\t", end="")
+#             for count in row:
+#                 print(f"{count}\t", end="")
+#             print()
 
-# Create an empty 2D matrix to represent the counts
-confusion_matrix = np.zeros((len(unique_tags), len(unique_tags)), dtype=int)
+# TR , PR
+# ORG, PER
+#
+#
+#
 
-# Create dictionary to map tags to index in confusion matrix
-tag_to_index = {tag: i for i, tag in enumerate(unique_tags)}
+tr_set = set()
+confusion_dict = {}  # {org:{org:count,per:count}}
 
-# Count occurrences of individual tags in truth set and predicted set
-truth_set_counts = Counter(truth_set)
-predicted_set_counts = Counter(predicted_set)
+for t, p in zip(truth_set, predicted_set):
+    if tr_set.__contains__(t):
+        values_dict = confusion_dict[t]
+    else:
+        values_dict = dict()
+        confusion_dict[t] = values_dict
+    tr_set.add(t)
 
-# Iterate through each tag combination in truth set and predicted set
-for truth_tag in unique_tags:
-    for predicted_tag in unique_tags:
-        # Get the corresponding indices in the confusion matrix
-        truth_index = tag_to_index[truth_tag]
-        predicted_index = tag_to_index[predicted_tag]
+    if values_dict.keys().__contains__(p):
+        values_dict[p] = values_dict[p] + 1
+    else:
+        values_dict[p] = 1
 
-        # Get the count of occurrences in truth set and predicted set
-        truth_count = truth_set_counts[truth_tag]
-        predicted_count = predicted_set_counts[predicted_tag]
 
-        # Get the count of occurrences where truth tag and predicted tag match
-        matching_count = sum(1 for t, p in zip(truth_set, predicted_set) if t == truth_tag and p == predicted_tag)
-
-        # Set the count in the confusion matrix
-        confusion_matrix[truth_index][predicted_index] = matching_count
-
-# Print the confusion matrix
-print("Confusion Matrix:")
-for tag in unique_tags:
-    print(f"\t{tag}", end="")
-print()
-with open('out1.txt', 'w') as f:
-    with redirect_stdout(f):
-        for i, row in enumerate(confusion_matrix):
-            print(f"{unique_tags[i]}\t", end="")
-            for count in row:
-                print(f"{count}\t", end="")
-            print()
+print(confusion_dict)
