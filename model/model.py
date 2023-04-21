@@ -20,7 +20,7 @@ arguments = parser.parse_args()
 
 df_train= pd.read_csv('data/new/cleaned/dataset-T1.csv')
 df_test = pd.read_csv('data/new/cleaned/gold.csv', sep = '\t')
-df_test=df_test.dropna()
+df_test=df_test.dropna(subset='labels',inplace=True)
 
 # df1 = pd.DataFrame({'document_id': df_train['document_id'], 'words': df_test['words'], 'labels': df_train['labels']})
 #
