@@ -24,8 +24,9 @@ df_test = pd.read_csv('data/new/cleaned/gold.csv', sep = '\t')
 df_test.dropna(subset=['labels'],inplace=True)
 
 
-
-
+df_train = df_train.dropna(subset=['sentence_id'])
+df_train = df_train.dropna(subset=['words'])
+df_train = df_train.dropna(subset=['labels'])
 
 # df1 = pd.DataFrame({'document_id': df_train['document_id'], 'words': df_test['words'], 'labels': df_train['labels']})
 #
