@@ -12,14 +12,17 @@ import csv
 # # file = 'data/finalf_usm-test.csv'
 # # df = pd.read_csv(file)
 # #
-with open('nn-yale.csv', 'a') as out_file:
-    with open('data/finalf_yale.txt', 'r') as in_file:
+with open('usm_yale.csv', 'a') as out_file:
+    with open('data/new/txtfiles/together.txt', 'r') as in_file:
         lines = in_file.readlines()
         for line in lines:
-            if len(line.split(',')) == 3:
-                out_file.write(line.replace(',','\t'))
-#
-#
+            split = line.split(',')
+            if len(split) == 3:
+                out_file.write(line.replace(',', '\t'))
+            elif len(split) == 4:
+                split = split[1:]
+                line = ','.join(split)
+                out_file.write(line.replace(',', '\t'))
 
 # import pandas as pd
 # # #
@@ -27,7 +30,3 @@ with open('nn-yale.csv', 'a') as out_file:
 # df = pd.read_csv('dataset78.csv', header=None, sep='\t',quoting=csv.QUOTE_NONE, encoding='utf-8')
 # df.head(10)
 # # #
-
-
-
-

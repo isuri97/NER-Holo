@@ -18,55 +18,60 @@ parser.add_argument('--train', required=False, help='train file', default='data/
 
 arguments = parser.parse_args()
 
-df1 = pd.read_csv('data/new/cleaned/dataset.csv')
-df1 = pd.DataFrame({'document_id': df1['document_id'], 'words': df1['words'], 'labels': df1['labels']})
+df_train= pd.read_csv('data/new/cleaned/dataset-T1.csv')
+df_test = pd.read_csv('data/new/cleaned/gold.csv', sep = '\t')
 
-sentence_id_list = []
+# df1 = pd.DataFrame({'document_id': df_train['document_id'], 'words': df_test['words'], 'labels': df_train['labels']})
+#
+# sentence_id_list = []
+#
+# sentence_id_seq = 0
+#
+# dropping_sentences = []
+#
+# for word in df1['words'].tolist():
+#     if word == "." or word == "?" or word == "!":
+#         sentence_id_list.append(sentence_id_seq)
+#         sentence_id_seq += 1
+#         word_count = 0
+#     else:
+#         sentence_id_list.append(sentence_id_seq)
+#
+# df1['sentence_id'] = sentence_id_list
 
-sentence_id_seq = 0
+# sentence_ids = list(set(sentence_id_list))
 
-dropping_sentences = []
-
-for word in df1['words'].tolist():
-    if word == "." or word == "?" or word == "!":
-        sentence_id_list.append(sentence_id_seq)
-        sentence_id_seq += 1
-        word_count = 0
-    else:
-        sentence_id_list.append(sentence_id_seq)
-
-df1['sentence_id'] = sentence_id_list
-
-sentence_ids = list(set(sentence_id_list))
-sentence_ids_train, sentence_ids_test = train_test_split(sentence_ids, test_size=0.3)
+# sentence_ids_train, sentence_ids_test = train_test_split(sentence_ids, test_size=0.3)
 # df2 = df1[df1['sentence_id'] not in dropping_sentences]
 
 # df_train, df_test = [x for _, x in df1.groupby(df1['sentence_id'] >= 400)]
 
-df_train = df1[df1["sentence_id"].isin(sentence_ids_train)]
-df_test = df1[df1["sentence_id"].isin(sentence_ids_test)]  # train_test_split(df1, test_size=0.1)
+# df_train = df1[df1["sentence_id"].isin(sentence_ids_train)]
+# df_test = df1[df1["sentence_id"].isin(sentence_ids_test)]  # train_test_split(df1, test_size=0.1)
+
+
 
 print(f'training set size {len(df_train)}')
 print(f'test set size {len(df_test)}')
 
 # concatenate words till . and add comma
-words = df_test['words']
-sentence_ids = df_test['sentence_id']
+# words = df_test['words']
+# sentence_ids = df_test['sentence_id']
 
 # df_test = df_test.astype({'labels': 'string'})
 
-sentences = []
-ids = []
-sentence = ""
-word_count = 0
-for word, s_id in zip(words.to_list(), sentence_ids.to_list()):
-    word_count += 1
-    sentence += word + " "
-    if word == "." or word == "?" or word == "!":
-        sentences.append(sentence.strip())
-        ids.append(s_id)
-        word_count = 0
-        sentence = ""
+# sentences = []
+# ids = []
+# sentence = ""
+# word_count = 0
+# for word, s_id in zip(words.to_list(), sentence_ids.to_list()):
+#     word_count += 1
+#     sentence += word + " "
+#     if word == "." or word == "?" or word == "!":
+#         sentences.append(sentence.strip())
+#         ids.append(s_id)
+#         word_count = 0
+#         sentence = ""
 
 model_args = NERArgs()
 model_args.train_batch_size = 64
@@ -161,100 +166,52 @@ labels = ['B-SHIP', 'I-SHIP', 'B-GHETTO', 'I-GHETTO', 'B-STREET', 'I-STREET', 'B
 
 print(metrics.classification_report(truths, preds, digits=4))
 
-new_df = pd.DataFrame({'truthset': truths, 'predset': preds})
-
-print(new_df)
-
-import numpy as np
-from collections import Counter
-
-# Example truth set and predicted set of NER tags
-# truth_set = ['ORG', 'LOC', 'PER', 'LOC', 'MISC', 'PER', 'PER']
-# predicted_set = ['ORG', 'LOC', 'PER', 'MISC', 'MISC', 'LOC', 'LOC']
-
-truth_set = new_df['truthset']
-predicted_set = new_df['predset']
-
-# # Get unique tags from truth set and predicted set
-# unique_tags = list(set(truth_set + predicted_set))
+# new_df = pd.DataFrame({'truthset': truths, 'predset': preds})
 #
-# # Create an empty 2D matrix to represent the counts
-# confusion_matrix = np.zeros((len(unique_tags), len(unique_tags)), dtype=int)
-#
-# # Create dictionary to map tags to index in confusion matrix
-# tag_to_index = {tag: i for i, tag in enumerate(unique_tags)}
-#
-# # Count occurrences of individual tags in truth set and predicted set
-# truth_set_counts = Counter(truth_set)
-# predicted_set_counts = Counter(predicted_set)
-#
-# for truth_tag in unique_tags:
-#     for predicted_tag in unique_tags:
-#         # Get the corresponding indices in the confusion matrix
-#         truth_index = tag_to_index[truth_tag]
-#         predicted_index = tag_to_index[predicted_tag]
-#
-#         # Get the count of occurrences in truth set and predicted set
-#         truth_count = truth_set_counts[truth_tag]
-#         predicted_count = predicted_set_counts[predicted_tag]
-#         matching_count = sum(1 for t, p in zip(truth_set, predicted_set) if t == truth_tag and p == predicted_tag)
-#         confusion_matrix[truth_index][predicted_index] = matching_count
-#
-# # Print the confusion matrix
-# print("Confusion Matrix:")
-# for tag in unique_tags:
-#     print(f"\t{tag}", end="")
-# print()
-# with open('out1.txt', 'w') as f:
-#     with redirect_stdout(f):
-#         for i, row in enumerate(confusion_matrix):
-#             print(f"{unique_tags[i]}\t", end="")
-#             for count in row:
-#                 print(f"{count}\t", end="")
-#             print()
-
-# TR , PR
-# ORG, PER
+# print(new_df)
 #
 #
 #
+# truth_set = new_df['truthset']
+# predicted_set = new_df['predset']
 
-tr_set = set()
-confusion_dict = {}  # {org:{org:count,per:count}}
-
-for t, p in zip(truth_set, predicted_set):
-    if tr_set.__contains__(t):
-        values_dict = confusion_dict[t]
-    else:
-        values_dict = dict()
-        confusion_dict[t] = values_dict
-    tr_set.add(t)
-
-    if values_dict.keys().__contains__(p):
-        values_dict[p] = values_dict[p] + 1
-    else:
-        values_dict[p] = 1
-
-
-print(confusion_dict)
-
-lst = ['O','B-CAMP', 'I-CAMP', 'B-SHIP', 'I-SHIP','B-GHETTO', 'I-GHETTO', 'B-PERSON', 'I-PERSON', 'B-STREET', 'I-STREET', 'B-DATE', 'I-DATE',\
-'B-GPE', 'I-GPE', 'B-TIME', 'I-TIME', 'B-EVENT', 'I-EVENT','B-MILITARY', 'I-MILITARY', 'B-ORG', 'I-ORG' ]
-
-final_list = []
-for tag in lst:
-    preds_dict = confusion_dict[tag]
-    print(preds_dict)
-    new_list = []
-    for i in lst:
-        if preds_dict.keys().__contains__(i):
-            count = preds_dict[i]
-        else:
-            count = 0
-        new_list.append(count)
-    final_list.append(new_list)
-
-print(final_list)
-
-
-
+#
+# tr_set = set()
+# confusion_dict = {}  # {org:{org:count,per:count}}
+#
+# for t, p in zip(truth_set, predicted_set):
+#     if tr_set.__contains__(t):
+#         values_dict = confusion_dict[t]
+#     else:
+#         values_dict = dict()
+#         confusion_dict[t] = values_dict
+#     tr_set.add(t)
+#
+#     if values_dict.keys().__contains__(p):
+#         values_dict[p] = values_dict[p] + 1
+#     else:
+#         values_dict[p] = 1
+#
+#
+# print(confusion_dict)
+#
+# lst = ['O','B-CAMP', 'I-CAMP', 'B-SHIP', 'I-SHIP','B-GHETTO', 'I-GHETTO', 'B-PERSON', 'I-PERSON', 'B-STREET', 'I-STREET', 'B-DATE', 'I-DATE',\
+# 'B-GPE', 'I-GPE', 'B-TIME', 'I-TIME', 'B-EVENT', 'I-EVENT','B-MILITARY', 'I-MILITARY', 'B-ORG', 'I-ORG' ]
+#
+# final_list = []
+# for tag in lst:
+#     preds_dict = confusion_dict[tag]
+#     print(preds_dict)
+#     new_list = []
+#     for i in lst:
+#         if preds_dict.keys().__contains__(i):
+#             count = preds_dict[i]
+#         else:
+#             count = 0
+#         new_list.append(count)
+#     final_list.append(new_list)
+#
+# print(final_list)
+#
+#
+#
