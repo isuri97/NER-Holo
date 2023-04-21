@@ -15922,7 +15922,7 @@ O   for	O
 5	Sankt	B-LOC
 5	Michael	I-LOC
 5	Saint	I-LOC
-5	Michael	O-LOC
+5	Michael	I-LOC
 5	which	O
 5	the	O
 5	Gestapo	B-ORG
