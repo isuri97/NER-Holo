@@ -25,6 +25,8 @@ df_test.dropna(subset=['labels'],inplace=True)
 
 
 
+
+
 # df1 = pd.DataFrame({'document_id': df_train['document_id'], 'words': df_test['words'], 'labels': df_train['labels']})
 #
 # sentence_id_list = []
