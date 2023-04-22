@@ -197,7 +197,7 @@ for t, p in zip(truth_set, predicted_set):
 
 print(confusion_dict)
 
-lst = ['O','B-CAMP', 'I-CAMP', 'B-SHIP', 'I-SHIP','B-GHETTO', 'I-GHETTO', 'B-PERSON', 'I-PERSON', 'B-STREET', 'I-STREET', 'B-DATE', 'I-DATE',\
+lst = ['O','B-CAMP', 'I-CAMP',  'I-SHIP','B-GHETTO', 'I-GHETTO', 'B-PERSON', 'I-PERSON', 'B-STREET', 'I-STREET', 'B-DATE', 'I-DATE',\
 'B-GPE', 'I-GPE', 'B-TIME', 'I-TIME', 'B-EVENT', 'I-EVENT','B-MILITARY', 'I-MILITARY', 'B-ORG', 'I-ORG' ]
 
 final_list = []
