@@ -28,6 +28,10 @@ df_train = df_train.dropna(subset=['sentence_id'])
 df_train = df_train.dropna(subset=['words'])
 df_train = df_train.dropna(subset=['labels'])
 
+df_test = df_test.dropna(subset=['sentence_id'])
+df_test = df_test.dropna(subset=['words'])
+df_test = df_test.dropna(subset=['labels'])
+
 # df1 = pd.DataFrame({'document_id': df_train['document_id'], 'words': df_test['words'], 'labels': df_train['labels']})
 #
 # sentence_id_list = []
