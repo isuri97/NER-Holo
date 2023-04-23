@@ -20,8 +20,8 @@ parser.add_argument('--train', required=False, help='train file', default='data/
 arguments = parser.parse_args()
 
 # df_train= pd.read_csv('data/new/cleaned/test-t.csv', sep='\t', error_bad_lines=False,encoding='utf-8')
-df_train = pd.read_csv('data/new/cleaned/dataset-T1.csv')
-df_test = pd.read_csv('data/new/cleaned/gold.csv', sep = '\t')
+df_train = pd.read_csv('data/new/cleaned/test-t.csv')
+df_test = pd.read_csv('data/new/cleaned/gold4.csv', sep = '\t')
 df_test.dropna(subset=['labels'],inplace=True)
 
 
@@ -197,7 +197,7 @@ for t, p in zip(truth_set, predicted_set):
 
 print(confusion_dict)
 
-lst = ['O','B-CAMP', 'I-CAMP', 'B-SHIP','B-GHETTO', 'I-GHETTO', 'B-PERSON', 'I-PERSON', 'B-STREET', 'I-STREET', 'B-DATE', 'I-DATE',\
+lst = ['O','B-CAMP', 'I-CAMP', 'B-GHETTO', 'I-GHETTO', 'B-PERSON', 'I-PERSON', 'B-STREET', 'I-STREET', 'B-DATE', 'I-DATE',\
 'B-GPE', 'I-GPE', 'B-TIME', 'I-TIME', 'B-EVENT', 'I-EVENT','B-MILITARY', 'I-MILITARY', 'B-ORG', 'I-ORG' ]
 
 final_list = []
