@@ -20,7 +20,7 @@ parser.add_argument('--train', required=False, help='train file', default='data/
 arguments = parser.parse_args()
 
 df_train= pd.read_csv('data/new/cleaned/test-t.csv', sep='\t', error_bad_lines=False,encoding='utf-8')
-df_test = pd.read_csv('data/new/cleaned/gold.csv', sep = '\t')
+df_test = pd.read_csv('data/new/cleaned/gold4.csv', sep = '\t')
 df_test.dropna(subset=['labels'],inplace=True)
 
 
