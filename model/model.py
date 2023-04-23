@@ -19,12 +19,11 @@ parser.add_argument('--train', required=False, help='train file', default='data/
 
 arguments = parser.parse_args()
 
-# df_train= pd.read_csv('data/new/cleaned/test-t.csv', sep='\t', error_bad_lines=False,encoding='utf-8')
-df_train = pd.read_csv('data/new/cleaned/test-t.csv',sep='\t',error_bad_lines=False,encoding='utf-8')
-df_test = pd.read_csv('data/new/cleaned/gold4.csv', sep = '\t',error_bad_lines=False,encoding='utf-8')
+df_train= pd.read_csv('data/new/cleaned/test-t.csv', sep='\t', error_bad_lines=False,encoding='utf-8')
+df_test = pd.read_csv('data/new/cleaned/gold.csv', sep = '\t')
 df_test.dropna(subset=['labels'],inplace=True)
 
-ĸ
+
 df_train = df_train.dropna(subset=['sentence_id'])
 df_train = df_train.dropna(subset=['words'])
 df_train = df_train.dropna(subset=['labels'])
@@ -129,9 +128,9 @@ key_list = []
 
 # take the label and count is it match with
 
-# labels = ['B-SHIP', 'I-SHIP', 'B-GHETTO', 'I-GHETTO', 'B-STREET', 'I-STREET', 'B-MILITARY', 'I-MILITARY', 'B-DATE',
-#           'I-DATE', 'B-PERSON', 'I-PERSON',
-#           'B-GPE', 'I-GPE', 'B-TIME', 'I-TIME', 'B-EVENT', 'I-EVENT', 'B-ORG', 'I-ORG', 'B-TIME', 'I-TIME']
+labels = ['B-SHIP', 'I-SHIP', 'B-GHETTO', 'I-GHETTO', 'B-STREET', 'I-STREET', 'B-MILITARY', 'I-MILITARY', 'B-DATE',
+          'I-DATE', 'B-PERSON', 'I-PERSON',
+          'B-GPE', 'I-GPE', 'B-TIME', 'I-TIME', 'B-EVENT', 'I-EVENT', 'B-ORG', 'I-ORG', 'B-TIME', 'I-TIME']
 
 # for i in predictions:
 #     for h in i:
@@ -168,52 +167,52 @@ key_list = []
 
 print(metrics.classification_report(truths, preds, digits=4))
 
-new_df = pd.DataFrame({'truthset': truths, 'predset': preds})
+# new_df = pd.DataFrame({'truthset': truths, 'predset': preds})
 #
 # print(new_df)
 #
 #
+#
+# truth_set = new_df['truthset']
+# predicted_set = new_df['predset']
 
-truth_set = new_df['truthset']
-predicted_set = new_df['predset']
-
-
-tr_set = set()
-confusion_dict = {}  # {org:{org:count,per:count}}
-
-for t, p in zip(truth_set, predicted_set):
-    if tr_set.__contains__(t):
-        values_dict = confusion_dict[t]
-    else:
-        values_dict = dict()
-        confusion_dict[t] = values_dict
-    tr_set.add(t)
-
-    if values_dict.keys().__contains__(p):
-        values_dict[p] = values_dict[p] + 1
-    else:
-        values_dict[p] = 1
-
-
-print(confusion_dict)
-
-lst = ['O','B-CAMP', 'I-CAMP', 'B-GHETTO', 'I-GHETTO', 'B-PERSON', 'I-PERSON', 'B-STREET', 'I-STREET', 'B-DATE', 'I-DATE',\
-'B-GPE', 'I-GPE', 'B-TIME', 'I-TIME', 'B-EVENT', 'I-EVENT','B-MILITARY', 'I-MILITARY', 'B-ORG', 'I-ORG' ]
-
-final_list = []
-for tag in lst:
-    preds_dict = confusion_dict[tag]
-    print(preds_dict)
-    new_list = []
-    for i in lst:
-        if preds_dict.keys().__contains__(i):
-            count = preds_dict[i]
-        else:
-            count = 0
-        new_list.append(count)
-    final_list.append(new_list)
-
-print(final_list)
+#
+# tr_set = set()
+# confusion_dict = {}  # {org:{org:count,per:count}}
+#
+# for t, p in zip(truth_set, predicted_set):
+#     if tr_set.__contains__(t):
+#         values_dict = confusion_dict[t]
+#     else:
+#         values_dict = dict()
+#         confusion_dict[t] = values_dict
+#     tr_set.add(t)
+#
+#     if values_dict.keys().__contains__(p):
+#         values_dict[p] = values_dict[p] + 1
+#     else:
+#         values_dict[p] = 1
+#
+#
+# print(confusion_dict)
+#
+# lst = ['O','B-CAMP', 'I-CAMP', 'B-SHIP', 'I-SHIP','B-GHETTO', 'I-GHETTO', 'B-PERSON', 'I-PERSON', 'B-STREET', 'I-STREET', 'B-DATE', 'I-DATE',\
+# 'B-GPE', 'I-GPE', 'B-TIME', 'I-TIME', 'B-EVENT', 'I-EVENT','B-MILITARY', 'I-MILITARY', 'B-ORG', 'I-ORG' ]
+#
+# final_list = []
+# for tag in lst:
+#     preds_dict = confusion_dict[tag]
+#     print(preds_dict)
+#     new_list = []
+#     for i in lst:
+#         if preds_dict.keys().__contains__(i):
+#             count = preds_dict[i]
+#         else:
+#             count = 0
+#         new_list.append(count)
+#     final_list.append(new_list)
+#
+# print(final_list)
 #
 #
 #
