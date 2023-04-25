@@ -17,6 +17,7 @@ parser.add_argument('--model_name', required=False, help='model name', default="
 parser.add_argument('--model_type', required=False, help='model type', default="bert-base-cased")
 parser.add_argument('--cuda_device', required=False, help='cuda device', default=0)
 parser.add_argument('--train', required=False, help='train file', default='data/sample.txt')
+parser.add_argument('--lr', required=False, help='Learning Rate', default=1e-4)
 
 arguments = parser.parse_args()
 
@@ -158,7 +159,7 @@ model_args.labels_list = ['O', 'B-DATE', 'B-PERSON', 'B-GPE', 'B-ORG', 'I-ORG', 
                           'B-SEA-OCEAN',
                           'I-SEA-OCEAN', 'I-CAMP', 'I-LOC', 'I-GHETTO', 'B-SPOUSAL', 'I-SPOUSAL', 'B-SHIP',
                           'I-SHIP', 'B-FOREST', 'I-FOREST', 'B-GROUP', 'I-GROUP', 'B-MOUNTAIN', 'I-MOUNTAIN']
-
+model_args.learning_rate = float(arguments.lr)
 MODEL_NAME = arguments.model_name
 MODEL_TYPE = arguments.model_type
 cuda_device = int(arguments.cuda_device)
