@@ -17,7 +17,7 @@ parser.add_argument('--model_name', required=False, help='model name', default="
 parser.add_argument('--model_type', required=False, help='model type', default="bert-base-cased")
 parser.add_argument('--cuda_device', required=False, help='cuda device', default=0)
 parser.add_argument('--train', required=False, help='train file', default='data/sample.txt')
-parser.add_argument('--lr', required=False, help='Learning Rate', default=1e-4)
+parser.add_argument('--lr', required=False, help='Learning Rate', default=4e-5)
 
 arguments = parser.parse_args()
 
