@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import torch.cuda
 from sklearn import metrics
@@ -19,10 +20,9 @@ parser.add_argument('--train', required=False, help='train file', default='data/
 
 arguments = parser.parse_args()
 
-df_train= pd.read_csv('data/new/cleaned/gold4.csv', sep='\t', quoting=csv.QUOTE_NONE, encoding='utf-8')
-df_test = pd.read_csv('data/new/cleaned/gold4.csv', sep = '\t',quoting=csv.QUOTE_NONE,encoding='utf-8')
-df_test.dropna(subset=['labels'],inplace=True)
-
+df_train = pd.read_csv('data/new/cleaned/gold4.csv', sep='\t', quoting=csv.QUOTE_NONE, encoding='utf-8')
+df_test = pd.read_csv('data/new/cleaned/gold4.csv', sep='\t', quoting=csv.QUOTE_NONE, encoding='utf-8')
+df_test.dropna(subset=['labels'], inplace=True)
 
 df_train = df_train.dropna(subset=['sentence_id'])
 df_train = df_train.dropna(subset=['words'])
@@ -61,28 +61,86 @@ df_test = df_test.dropna(subset=['labels'])
 # df_test = df1[df1["sentence_id"].isin(sentence_ids_test)]  # train_test_split(df1, test_size=0.1)
 
 
-
 print(f'training set size {len(df_train)}')
 print(f'test set size {len(df_test)}')
 
 # concatenate words till . and add comma
-# words = df_test['words']
-# sentence_ids = df_test['sentence_id']
+words = df_test['words']
+sentence_ids = df_test['sentence_id']
+labels = df_test['labels']
 
 # df_test = df_test.astype({'labels': 'string'})
 
-# sentences = []
-# ids = []
-# sentence = ""
-# word_count = 0
-# for word, s_id in zip(words.to_list(), sentence_ids.to_list()):
-#     word_count += 1
-#     sentence += word + " "
-#     if word == "." or word == "?" or word == "!":
-#         sentences.append(sentence.strip())
-#         ids.append(s_id)
-#         word_count = 0
-#         sentence = ""
+sentences = []
+ids = []
+sentence = ""
+word_count = 0
+# ll =[]
+l2 = []
+tok_lst = []
+for word, s_id, l in zip(words.to_list(), sentence_ids.to_list(), labels.to_list()):
+    # for word, s_id in zip(words.to_list(), sentence_ids.to_list()):
+    word_count += 1
+    sentence += word + " "
+    tok_lst.append(l)
+    if word == "." or word == "?" or word == "!":
+        sentences.append(sentence.strip())
+        ids.append(s_id)
+        l2.append(tok_lst)
+        tok_lst = []
+        word_count = 0
+        sentence = ""
+    # ll.append(l2)
+
+o_sentences = []
+o_tokens = []
+bi_sentences = []
+bi_tokens = []
+
+for tok_list, sent in zip(l2, sentences):
+
+    found = False
+    for tok in tok_list:
+        if str(tok).startswith('B') or str(tok).startswith('I'):
+            bi_sentences.append(sent)
+            bi_tokens.append(tok_list)
+            found = True
+            break
+    if not found:
+        o_sentences.append(sent)
+        o_tokens.append(tok_list)
+
+    # if 'B' not in tok_list and 'I' not in tok_list:
+    #     o_sentences.append(sent)
+    #     o_tokens.append(tok_list)
+    # else:
+    #     bi_sentences.append(sent)
+    #     bi_tokens.append(tok_list)
+
+print(f'total O sent : {len(o_sentences)}')
+print(f'total Other sent : {len(bi_sentences)}')
+
+o_sentences = o_sentences[:3064]
+o_tokens = o_tokens[:3064]
+
+bi_sentences += o_sentences
+bi_tokens += o_tokens
+
+sent_arr = np.array(bi_sentences)
+tok_arr = np.array(bi_tokens)
+
+# shuffle the indexes
+r_indexes = np.arange(len(sent_arr))
+np.random.shuffle(r_indexes)
+
+sent_arr = sent_arr[r_indexes]
+tok_arr = tok_arr[r_indexes]
+
+sentence_list = sent_arr.tolist()
+token_list = tok_arr.tolist()
+
+print(f'total number of sentences : {len(sentence_list)}')
+print(f'total number of tokens : {len(token_list)}')
 
 model_args = NERArgs()
 model_args.train_batch_size = 64
@@ -94,10 +152,11 @@ model_args.use_multiprocessing_for_evaluation = False
 model_args.classification_report = True
 # model_args.wandb_project="holo-ner"
 model_args.labels_list = ['O', 'B-DATE', 'B-PERSON', 'B-GPE', 'B-ORG', 'I-ORG', 'B-LANGUAGE',
-                          'B-EVENT', 'I-DATE',  'B-TIME', 'I-TIME', 'I-GPE','I-PERSON',
-                          'B-MILITARY','I-MILITARY','B-CAMP', 'I-EVENT', 'I-CARDINAL', 'B-LAW', 'I-LAW',
-                          'B-RIVER','I-RIVER','I-QUANTITY', 'B-STREET', 'I-STREET', 'B-LOC', 'B-GHETTO', 'B-SEA-OCEAN',
-                          'I-SEA-OCEAN','I-CAMP', 'I-LOC',  'I-GHETTO', 'B-SPOUSAL', 'I-SPOUSAL', 'B-SHIP',
+                          'B-EVENT', 'I-DATE', 'B-TIME', 'I-TIME', 'I-GPE', 'I-PERSON',
+                          'B-MILITARY', 'I-MILITARY', 'B-CAMP', 'I-EVENT', 'I-CARDINAL', 'B-LAW', 'I-LAW',
+                          'B-RIVER', 'I-RIVER', 'I-QUANTITY', 'B-STREET', 'I-STREET', 'B-LOC', 'B-GHETTO',
+                          'B-SEA-OCEAN',
+                          'I-SEA-OCEAN', 'I-CAMP', 'I-LOC', 'I-GHETTO', 'B-SPOUSAL', 'I-SPOUSAL', 'B-SHIP',
                           'I-SHIP', 'B-FOREST', 'I-FOREST', 'B-GROUP', 'I-GROUP', 'B-MOUNTAIN', 'I-MOUNTAIN']
 
 MODEL_NAME = arguments.model_name
