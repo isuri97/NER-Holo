@@ -2,7 +2,7 @@ import pandas as pd
 import csv
 
 
-df1 = pd.read_csv('nn-yale.csv', sep='\t',quoting=csv.QUOTE_NONE, encoding='utf-8')
+df1 = pd.read_csv('new/cleaned/gold4.csv', sep='\t',quoting=csv.QUOTE_NONE, encoding='utf-8')
 df1
 
 sentence_id_list = []
@@ -15,10 +15,10 @@ for word in df1['words'].tolist():
     else:
         sentence_id_list.append(sentence_id_seq)
 
-df1['sentence_id'] = sentence_id_list
+df1['sentence_ids'] = sentence_id_list
 # df1 = pd.DataFrame({'document_id': df1['sentence_id'], 'words': df1['words'], 'labels': df1['labels']})
 
-df1.to_csv('yaletest.csv',index=False,sep='\t')
+df1.to_csv('gold4.csv',index=False,sep='\t')
 # print('a')
 
 
