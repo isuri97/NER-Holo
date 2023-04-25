@@ -73,76 +73,76 @@ labels = df_test['labels']
 
 # df_test = df_test.astype({'labels': 'string'})
 
-sentences = []
-ids = []
-sentence = ""
-word_count = 0
-# ll =[]
-l2 = []
-tok_lst = []
-for word, s_id, l in zip(words.to_list(), sentence_ids.to_list(), labels.to_list()):
-    # for word, s_id in zip(words.to_list(), sentence_ids.to_list()):
-    word_count += 1
-    sentence += word + " "
-    tok_lst.append(l)
-    if word == "." or word == "?" or word == "!":
-        sentences.append(sentence.strip())
-        ids.append(s_id)
-        l2.append(tok_lst)
-        tok_lst = []
-        word_count = 0
-        sentence = ""
-    # ll.append(l2)
-
-o_sentences = []
-o_tokens = []
-bi_sentences = []
-bi_tokens = []
-
-for tok_list, sent in zip(l2, sentences):
-
-    found = False
-    for tok in tok_list:
-        if str(tok).startswith('B') or str(tok).startswith('I'):
-            bi_sentences.append(sent)
-            bi_tokens.append(tok_list)
-            found = True
-            break
-    if not found:
-        o_sentences.append(sent)
-        o_tokens.append(tok_list)
-
-    # if 'B' not in tok_list and 'I' not in tok_list:
-    #     o_sentences.append(sent)
-    #     o_tokens.append(tok_list)
-    # else:
-    #     bi_sentences.append(sent)
-    #     bi_tokens.append(tok_list)
-
-print(f'total O sent : {len(o_sentences)}')
-print(f'total Other sent : {len(bi_sentences)}')
-
-o_sentences = o_sentences[:3064]
-o_tokens = o_tokens[:3064]
-
-bi_sentences += o_sentences
-bi_tokens += o_tokens
-
-sent_arr = np.array(bi_sentences)
-tok_arr = np.array(bi_tokens)
-
-# shuffle the indexes
-r_indexes = np.arange(len(sent_arr))
-np.random.shuffle(r_indexes)
-
-sent_arr = sent_arr[r_indexes]
-tok_arr = tok_arr[r_indexes]
-
-sentence_list = sent_arr.tolist()
-token_list = tok_arr.tolist()
-
-print(f'total number of sentences : {len(sentence_list)}')
-print(f'total number of tokens : {len(token_list)}')
+# sentences = []
+# ids = []
+# sentence = ""
+# word_count = 0
+# # ll =[]
+# l2 = []
+# tok_lst = []
+# for word, s_id, l in zip(words.to_list(), sentence_ids.to_list(), labels.to_list()):
+#     # for word, s_id in zip(words.to_list(), sentence_ids.to_list()):
+#     word_count += 1
+#     sentence += word + " "
+#     tok_lst.append(l)
+#     if word == "." or word == "?" or word == "!":
+#         sentences.append(sentence.strip())
+#         ids.append(s_id)
+#         l2.append(tok_lst)
+#         tok_lst = []
+#         word_count = 0
+#         sentence = ""
+#     # ll.append(l2)
+#
+# o_sentences = []
+# o_tokens = []
+# bi_sentences = []
+# bi_tokens = []
+#
+# for tok_list, sent in zip(l2, sentences):
+#
+#     found = False
+#     for tok in tok_list:
+#         if str(tok).startswith('B') or str(tok).startswith('I'):
+#             bi_sentences.append(sent)
+#             bi_tokens.append(tok_list)
+#             found = True
+#             break
+#     if not found:
+#         o_sentences.append(sent)
+#         o_tokens.append(tok_list)
+#
+#     # if 'B' not in tok_list and 'I' not in tok_list:
+#     #     o_sentences.append(sent)
+#     #     o_tokens.append(tok_list)
+#     # else:
+#     #     bi_sentences.append(sent)
+#     #     bi_tokens.append(tok_list)
+#
+# print(f'total O sent : {len(o_sentences)}')
+# print(f'total Other sent : {len(bi_sentences)}')
+#
+# o_sentences = o_sentences[:3064]
+# o_tokens = o_tokens[:3064]
+#
+# bi_sentences += o_sentences
+# bi_tokens += o_tokens
+#
+# sent_arr = np.array(bi_sentences)
+# tok_arr = np.array(bi_tokens)
+#
+# # shuffle the indexes
+# r_indexes = np.arange(len(sent_arr))
+# np.random.shuffle(r_indexes)
+#
+# sent_arr = sent_arr[r_indexes]
+# tok_arr = tok_arr[r_indexes]
+#
+# sentence_list = sent_arr.tolist()
+# token_list = tok_arr.tolist()
+#
+# print(f'total number of sentences : {len(sentence_list)}')
+# print(f'total number of tokens : {len(token_list)}')
 
 model_args = NERArgs()
 model_args.train_batch_size = 64
