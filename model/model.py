@@ -21,7 +21,7 @@ parser.add_argument('--lr', required=False, help='Learning Rate', default=4e-5)
 
 arguments = parser.parse_args()
 
-df_train = pd.read_csv('data/new/cleaned/dataset.csv', sep='\t', quoting=csv.QUOTE_NONE, encoding='utf-8')
+df_train = pd.read_csv('data/new/cleaned/dataset.csv', sep=',', quoting=csv.QUOTE_NONE, encoding='utf-8')
 df_test = pd.read_csv('data/new/cleaned/gold.csv', sep='\t', quoting=csv.QUOTE_NONE, encoding='utf-8')
 df_test.dropna(subset=['labels'], inplace=True)
 
