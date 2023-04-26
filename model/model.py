@@ -145,7 +145,7 @@ labels = df_test['labels']
 # print(f'total number of tokens : {len(token_list)}')
 
 model_args = NERArgs()
-model_args.train_batch_size = 64
+model_args.train_batch_size = 128
 model_args.eval_batch_size = 64
 model_args.overwrite_output_dir = True
 model_args.num_train_epochs = 1
