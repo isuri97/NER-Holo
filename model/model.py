@@ -148,7 +148,7 @@ model_args = NERArgs()
 model_args.train_batch_size = 64
 model_args.eval_batch_size = 64
 model_args.overwrite_output_dir = True
-model_args.num_train_epochs = 3
+model_args.num_train_epochs = 1
 model_args.use_multiprocessing = False
 model_args.use_multiprocessing_for_evaluation = False
 model_args.classification_report = True
@@ -230,7 +230,10 @@ labels = ['B-SHIP', 'I-SHIP', 'B-GHETTO', 'I-GHETTO', 'B-STREET', 'I-STREET', 'B
 # print(ct)
 # print(preds)
 
-print(metrics.classification_report(truths, preds, digits=4))
+with open('out.txt', 'w') as f:
+    with redirect_stdout(f):
+
+        print(metrics.classification_report(truths, preds, digits=4))
 
 # new_df = pd.DataFrame({'truthset': truths, 'predset': preds})
 #
