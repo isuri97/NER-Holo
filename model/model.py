@@ -188,6 +188,7 @@ preds_list = [tag for s in preds_list for tag in s]
 ll = []
 key_list = []
 
+
 # df_test['original_test_set'] = truths
 # df_test['predicted_set'] = preds
 
@@ -239,11 +240,15 @@ new_df = pd.DataFrame({'truthset': truths, 'predset': preds})
 
 print(new_df)
 
-
-
 truth_set = new_df['truthset']
 predicted_set = new_df['predset']
 
+ner_counts = Counter(new_df["predset"])
+
+with open('count.txt', 'w') as f:
+    with redirect_stdout(f):
+        for tag, count in ner_counts.items():
+            print(f"{tag}: {count}")
 
 tr_set = set()
 confusion_dict = {}  # {org:{org:count,per:count}}
@@ -280,7 +285,10 @@ for tag in lst:
         new_list.append(count)
     final_list.append(new_list)
 
-print(final_list)
+with open('out.txt', 'w') as f:
+    with redirect_stdout(f):
+
+        print(final_list)
 
 #
 #
