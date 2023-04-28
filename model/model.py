@@ -24,7 +24,7 @@ arguments = parser.parse_args()
 df_train = pd.read_csv('data/new/cleaned/dataset-T1.csv', sep=',', quoting=csv.QUOTE_NONE, encoding='utf-8')
 df_test = pd.read_csv('data/new/cleaned/gold.csv', sep='\t', quoting=csv.QUOTE_NONE, encoding='utf-8')
 
-df_gold_train = pd.read_csv('data/new/cleaned/gold4.csv', sep='\t', quoting=csv.QUOTE_NONE, encoding='utf-8')
+# df_gold_train = pd.read_csv('data/new/cleaned/gold4.csv', sep='\t', quoting=csv.QUOTE_NONE, encoding='utf-8')
 
 
 
@@ -38,9 +38,9 @@ df_test = df_test.dropna(subset=['sentence_id'])
 df_test = df_test.dropna(subset=['words'])
 df_test = df_test.dropna(subset=['labels'])
 
-df_gold_train = df_gold_train.dropna(subset=['sentence_id'])
-df_gold_train = df_gold_train.dropna(subset=['words'])
-df_gold_train = df_gold_train.dropna(subset=['labels'])
+# df_gold_train = df_gold_train.dropna(subset=['sentence_id'])
+# df_gold_train = df_gold_train.dropna(subset=['words'])
+# df_gold_train = df_gold_train.dropna(subset=['labels'])
 
 # df1 = pd.DataFrame({'document_id': df_train['document_id'], 'words': df_test['words'], 'labels': df_train['labels']})
 #
@@ -71,9 +71,10 @@ df_gold_train = df_gold_train.dropna(subset=['labels'])
 # df_train = df1[df1["sentence_id"].isin(sentence_ids_train)]
 # df_test = df1[df1["sentence_id"].isin(sentence_ids_test)]  # train_test_split(df1, test_size=0.1)
 
-
 print(f'training set size {len(df_train)}')
 print(f'test set size {len(df_test)}')
+
+
 
 # concatenate words till . and add comma
 words = df_test['words']
@@ -157,7 +158,7 @@ model_args = NERArgs()
 model_args.train_batch_size = 64
 model_args.eval_batch_size = 64
 model_args.overwrite_output_dir = True
-model_args.num_train_epochs = 3
+model_args.num_train_epochs = 1
 model_args.use_multiprocessing = False
 model_args.use_multiprocessing_for_evaluation = False
 model_args.classification_report = True
